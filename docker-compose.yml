@@ -1,11 +1,11 @@
-name: 'template_service'
+name: 'financial_service'
 
 services:
   
-  domic.template.api:
+  domic.financial.api:
     networks:
       - domic
-    image: template_service:1.0.0
+    image: financial_service:1.0.0
     build:
       context: .
       dockerfile: Dockerfile
@@ -24,11 +24,11 @@ services:
       - I-RabbitMQ-Port=
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
-      - RedisConnectionString=domic.template.redis:6379
+      - RedisConnectionString=domic.financial.redis:6379
       - MongoConnectionString=
-      - C-SqlServerConnectionString=Server=domic.template.command.sql.server,1433;Database=TemplateService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
-      - Q-SqlServerConnectionString=Server=domic.template.query.sql.server,1433;Database=TemplateService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
-      - Host=domic.template.api
+      - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=financialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
+      - Q-SqlServerConnectionString=Server=domic.financial.query.sql.server,1433;Database=financialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
+      - Host=domic.financial.api
       - Port=80
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -36,38 +36,38 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Karami.WebAPI.pfx
     
     depends_on:
-      - domic.template.command.sql.server
-      - domic.template.query.sql.server
-      - domic.template.redis
-      - domic.template.rabbit
+      - domic.financial.command.sql.server
+      - domic.financial.query.sql.server
+      - domic.financial.redis
+      - domic.financial.rabbit
   
-  domic.template.command.sql.server:
+  domic.financial.command.sql.server:
     networks:
       - domic
     image: 'mcr.microsoft.com/mssql/server'
-    container_name: "template_command_sql_server"
+    container_name: "financial_command_sql_server"
     ports:
       - 1433:1433
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Hasan313@@313!!
   
-  domic.template.query.sql.server:
+  domic.financial.query.sql.server:
     networks:
       - domic
     image: 'mcr.microsoft.com/mssql/server'
-    container_name: "template_query_sql_server"
+    container_name: "financial_query_sql_server"
     ports:
       - 1400:1433
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Hasan313@@313!!
 
-  domic.template.rabbit:
+  domic.financial.rabbit:
     networks:
       - domic
     image: 'rabbitmq:3-management'
-    container_name: 'template_rabbit'
+    container_name: 'financial_rabbit'
     restart: on-failure
     ports:
       - '15660:15672'
@@ -76,11 +76,11 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
-  domic.template.redis:
+  domic.financial.redis:
     networks:
       - domic
     image: 'redis'
-    container_name: 'template_redis'
+    container_name: 'financial_redis'
     command: 'redis-server'
     ports:
       - 6380:6379
