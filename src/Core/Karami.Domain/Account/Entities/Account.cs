@@ -35,6 +35,15 @@ public class Account : Entity<string>
         Balance = new Balance(balance);
         CreatedAt = new CreatedAt(nowDateTime, nowPersianDateTime);
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new AccountCreated {
+                CreatedAt_EnglishDate = nowDateTime,
+                CreatedAt_PersianDate = nowPersianDateTime,
+                UpdatedAt_EnglishDate = nowDateTime,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        );
     }
 
     /*---------------------------------------------------------------*/
@@ -44,12 +53,13 @@ public class Account : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    public void Active(IDateTime dateTime)
+    public void Active(IDateTime dateTime, string updatedBy)
     {
         var nowDateTime = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
         IsActive  = IsActive.Active;
+        UpdatedBy = updatedBy;
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
