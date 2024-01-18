@@ -5,7 +5,7 @@ using Karami.Core.Domain.Enumerations;
 
 namespace Karami.Domain.Service.Entities;
 
-public class Template : Entity<string>
+public class Account : Entity<string>
 {
     //Value Objects
 
@@ -16,7 +16,7 @@ public class Template : Entity<string>
     /*---------------------------------------------------------------*/
 
     //EF Core
-    private Template() {}
+    private Account() {}
 
     /*---------------------------------------------------------------*/
     
@@ -30,9 +30,10 @@ public class Template : Entity<string>
         IsActive = IsActive.Active;
         
         /*AddEvent(
-            new TemplateActived {
-                Id       = Id ,
-                IsActive = IsActive == IsActive.Active
+            new AccountActived {
+                Id = Id ,
+                IsActive = IsActive == IsActive.Active,
+                UpdatedAt_EnglishDate = 
             }
         );*/
     }

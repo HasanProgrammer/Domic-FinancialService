@@ -1,6 +1,6 @@
 namespace Karami.Common.ClassConsts;
 
-public static class Table
+public class Table
 {
-    public const string TemplateTable = "Templates";
+    public const string AccountTable = "Accounts";
 }

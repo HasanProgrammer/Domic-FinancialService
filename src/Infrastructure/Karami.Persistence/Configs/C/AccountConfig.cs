@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Karami.Persistence.Configs.C;
 
-public class TemplateConfig : IEntityTypeConfiguration<Template>
+public class AccountConfig : IEntityTypeConfiguration<Account>
 {
-    public void Configure(EntityTypeBuilder<Template> builder)
+    public void Configure(EntityTypeBuilder<Account> builder)
     {
         //PrimaryKey
         
-        builder.HasKey(Permission => Permission.Id);
+        builder.HasKey(account => account.Id);
 
-        builder.ToTable("Permissions");
+        builder.ToTable("Accounts");
         
         /*-----------------------------------------------------------*/
 

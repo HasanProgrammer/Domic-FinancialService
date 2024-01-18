@@ -3,11 +3,11 @@ using Karami.Persistence.Contexts.C;
 
 namespace Karami.Infrastructure.Implementations.Domain.Repositories.C;
 
-public class TemplateCommandRepository : ITemplateCommandRepository
+public class AccountCommandRepository : IAccountCommandRepository
 {
     private readonly SQLContext _sqlContext;
 
-    public TemplateCommandRepository(SQLContext sqlContext)
+    public AccountCommandRepository(SQLContext sqlContext)
     {
         _sqlContext = sqlContext;
     }

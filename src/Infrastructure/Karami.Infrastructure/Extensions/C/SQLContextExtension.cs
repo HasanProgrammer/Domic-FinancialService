@@ -10,7 +10,7 @@ public static class SQLContextExtension
     /// <param name="context"></param>
     public static void Seed(this SQLContext context)
     {
-        #region Template Seeder
+        #region Account Seeder
 
         #endregion
 

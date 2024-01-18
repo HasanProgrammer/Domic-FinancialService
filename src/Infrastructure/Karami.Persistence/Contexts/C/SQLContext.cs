@@ -18,8 +18,8 @@ public partial class SQLContext : DbContext
 /*Entity*/
 public partial class SQLContext
 {
-    public DbSet<Event> Events       { get; set; }
-    public DbSet<Template> Templates { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<Account> Accounts { get; set; }
 }
 
 /*Config*/
@@ -30,6 +30,6 @@ public partial class SQLContext
         base.OnModelCreating(builder);
         
         builder.ApplyConfiguration(new EventConfig());
-        builder.ApplyConfiguration(new TemplateConfig());
+        builder.ApplyConfiguration(new AccountConfig());
     }
 }
