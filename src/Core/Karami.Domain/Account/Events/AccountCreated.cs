@@ -5,7 +5,7 @@ using Karami.Core.Domain.Enumerations;
 namespace Karami.Domain.Service.Events;
 
 [MessageBroker(ExchangeType = Exchange.FanOut, Queue = "")]
-public class AccountCreated : CreateDomainEvent
+public class AccountCreated : CreateDomainEvent<string>
 {
-    
+    public required long Balance { get; init; }
 }

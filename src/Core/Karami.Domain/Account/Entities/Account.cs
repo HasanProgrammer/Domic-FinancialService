@@ -38,10 +38,11 @@ public class Account : Entity<string>
         
         AddEvent(
             new AccountCreated {
+                Id = uniqueId,
+                CreatedBy = uniqueId,
+                Balance = balance,
                 CreatedAt_EnglishDate = nowDateTime,
-                CreatedAt_PersianDate = nowPersianDateTime,
-                UpdatedAt_EnglishDate = nowDateTime,
-                UpdatedAt_PersianDate = nowPersianDateTime
+                CreatedAt_PersianDate = nowPersianDateTime
             }
         );
     }
@@ -58,13 +59,14 @@ public class Account : Entity<string>
         var nowDateTime = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
-        IsActive  = IsActive.Active;
+        IsActive = IsActive.Active;
         UpdatedBy = updatedBy;
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new AccountActived {
                 Id = Id,
+                UpdatedBy = updatedBy,
                 IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
@@ -75,17 +77,19 @@ public class Account : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    public void InActive(IDateTime dateTime)
+    public void InActive(IDateTime dateTime, string updatedBy)
     {
         var nowDateTime = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
-        IsActive  = IsActive.InActive;
+        IsActive = IsActive.InActive;
+        UpdatedBy = updatedBy;
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new AccountInActived {
                 Id = Id,
+                UpdatedBy = updatedBy,
                 IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
