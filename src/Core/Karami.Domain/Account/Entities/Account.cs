@@ -40,6 +40,7 @@ public class Account : Entity<string>
             new AccountCreated {
                 Id = uniqueId,
                 CreatedBy = uniqueId,
+                CreatedRole = "",
                 Balance = balance,
                 CreatedAt_EnglishDate = nowDateTime,
                 CreatedAt_PersianDate = nowPersianDateTime
@@ -67,6 +68,7 @@ public class Account : Entity<string>
             new AccountActived {
                 Id = Id,
                 UpdatedBy = updatedBy,
+                UpdatedRole = "",
                 IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
@@ -90,6 +92,7 @@ public class Account : Entity<string>
             new AccountInActived {
                 Id = Id,
                 UpdatedBy = updatedBy,
+                UpdatedRole = "",
                 IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
