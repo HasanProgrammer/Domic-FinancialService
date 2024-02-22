@@ -24,9 +24,8 @@ builder.RegisterGrpcServer();
 builder.RegisterEntityFrameworkCoreCommand<SQLContext, string>();
 builder.RegisterCommandQueryUseCases();
 builder.RegisterCommandRepositories();
-builder.RegisterQueryRepositories();
-builder.RegisterMessageBroker();
 builder.RegisterRedisCaching();
+builder.RegisterMessageBroker();
 builder.RegisterEventsPublisher();
 builder.RegisterEventsSubscriber();
 builder.RegisterServices();
@@ -43,7 +42,7 @@ WebApplication application = builder.Build();
 
 //Primary processing
 
-application.Services.AutoMigration<SQLContext>(context => context.Seed());
+application.Services.AutoMigration<SQLContext>();
 
 /*-------------------------------------------------------------------*/
 
