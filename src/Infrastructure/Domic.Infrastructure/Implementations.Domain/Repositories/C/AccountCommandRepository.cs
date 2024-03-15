@@ -1,14 +1,14 @@
-﻿using Domic.Domain.Service.Contracts.Interfaces;
+﻿using Domic.Domain.Account.Contracts.Interfaces;
+using Domic.Domain.Account.Entities;
 using Domic.Persistence.Contexts.C;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
-public class AccountCommandRepository : IAccountCommandRepository
+public class AccountCommandRepository(SQLContext context) : IAccountCommandRepository
 {
-    private readonly SQLContext _sqlContext;
+    public Task<Account> FindByUserIdAsync(string userId, CancellationToken cancellationToken) 
+        => context.Accounts.FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
 
-    public AccountCommandRepository(SQLContext sqlContext)
-    {
-        _sqlContext = sqlContext;
-    }
+    public void Change(Account entity) => context.Accounts.Update(entity);
 }

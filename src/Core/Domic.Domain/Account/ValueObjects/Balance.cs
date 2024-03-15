@@ -1,6 +1,6 @@
 using Domic.Core.Domain.Contracts.Abstracts;
 
-namespace Domic.Domain.Service.ValueObjects;
+namespace Domic.Domain.Account.ValueObjects;
 
 public class Balance : ValueObject
 {

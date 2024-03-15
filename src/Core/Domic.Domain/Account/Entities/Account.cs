@@ -1,16 +1,18 @@
 #pragma warning disable CS0649
 
-using Domic.Domain.Service.Events;
-using Domic.Domain.Service.ValueObjects;
 using Domic.Core.Domain.Contracts.Abstracts;
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
+using Domic.Domain.Account.Events;
+using Domic.Domain.Account.ValueObjects;
 
-namespace Domic.Domain.Service.Entities;
+namespace Domic.Domain.Account.Entities;
 
 public class Account : Entity<string>
 {
+    public string UserId { get; private set; }
+    
     //Value Objects
     
     public Balance Balance { get; private set; }
@@ -24,8 +26,17 @@ public class Account : Entity<string>
     //EF Core
     private Account() {}
 
-    public Account(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string createdBy, 
-        string createdRole, long balance
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="globalUniqueIdGenerator"></param>
+    /// <param name="dateTime"></param>
+    /// <param name="userId"></param>
+    /// <param name="createdBy"></param>
+    /// <param name="createdRole"></param>
+    /// <param name="balance"></param>
+    public Account(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string userId,
+        string createdBy, string createdRole, long balance
     )
     {
         var uniqueId = globalUniqueIdGenerator.GetRandom(6);
@@ -33,6 +44,7 @@ public class Account : Entity<string>
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
         Id = uniqueId;
+        UserId = userId;
         CreatedBy = createdBy;
         CreatedRole = createdRole;
         Balance = new Balance(balance);
@@ -42,6 +54,7 @@ public class Account : Entity<string>
         AddEvent(
             new AccountCreated {
                 Id = uniqueId,
+                UserId = userId,
                 CreatedBy = createdBy,
                 CreatedRole = createdRole,
                 Balance = balance,
@@ -76,7 +89,6 @@ public class Account : Entity<string>
                 Id = Id,
                 UpdatedBy = updatedBy,
                 UpdatedRole = updatedRole,
-                IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
             }
@@ -104,7 +116,6 @@ public class Account : Entity<string>
                 Id = Id,
                 UpdatedBy = updatedBy,
                 UpdatedRole = updatedRole,
-                IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
             }

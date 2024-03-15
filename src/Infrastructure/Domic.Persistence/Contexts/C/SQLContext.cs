@@ -1,7 +1,7 @@
 using Domic.Persistence.Configs.C;
 using Domic.Core.Domain.Entities;
 using Domic.Core.Persistence.Configs;
-using Domic.Domain.Service.Entities;
+using Domic.Domain.Account.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domic.Persistence.Contexts.C;

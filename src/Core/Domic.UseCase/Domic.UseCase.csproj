@@ -15,9 +15,6 @@
   <ItemGroup>
     <PackageReference Include="Domic.Architecture.UseCase" Version="3.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AccountUseCase\Events\" />
-  </ItemGroup>
   <!--CorePackage | UseCase-->
 
 </Project>

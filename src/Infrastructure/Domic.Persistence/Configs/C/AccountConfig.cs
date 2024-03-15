@@ -1,4 +1,4 @@
-using Domic.Domain.Service.Entities;
+using Domic.Domain.Account.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

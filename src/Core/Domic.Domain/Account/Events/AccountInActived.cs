@@ -2,10 +2,7 @@ using Domic.Core.Domain.Attributes;
 using Domic.Core.Domain.Contracts.Abstracts;
 using Domic.Core.Domain.Enumerations;
 
-namespace Domic.Domain.Service.Events;
+namespace Domic.Domain.Account.Events;
 
-[MessageBroker(ExchangeType = Exchange.FanOut, Exchange = "", Queue = "")]
-public class AccountInActived : UpdateDomainEvent<string>
-{
-    public required bool IsActive { get; init; }
-}
+[MessageBroker(ExchangeType = Exchange.FanOut, Exchange = "Financial_Account_Exchange", Queue = "Financial_Account_Queue")]
+public class AccountInActived : UpdateDomainEvent<string>;
