@@ -1,6 +1,5 @@
 using Domic.Core.Infrastructure.Extensions;
 using Domic.Core.WebAPI.Extensions;
-using Domic.Infrastructure.Extensions.C;
 using Domic.Persistence.Contexts.C;
 using Domic.WebAPI.Frameworks.Extensions;
 

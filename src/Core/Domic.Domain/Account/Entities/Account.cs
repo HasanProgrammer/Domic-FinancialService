@@ -24,14 +24,17 @@ public class Account : Entity<string>
     //EF Core
     private Account() {}
 
-    public Account(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, long balance)
+    public Account(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string createdBy, 
+        string createdRole, long balance
+    )
     {
-        var uniqueId = globalUniqueIdGenerator.GetRandom();
+        var uniqueId = globalUniqueIdGenerator.GetRandom(6);
         var nowDateTime = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
         Id = uniqueId;
-        CreatedBy = uniqueId;
+        CreatedBy = createdBy;
+        CreatedRole = createdRole;
         Balance = new Balance(balance);
         CreatedAt = new CreatedAt(nowDateTime, nowPersianDateTime);
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
@@ -39,8 +42,8 @@ public class Account : Entity<string>
         AddEvent(
             new AccountCreated {
                 Id = uniqueId,
-                CreatedBy = uniqueId,
-                CreatedRole = "",
+                CreatedBy = createdBy,
+                CreatedRole = createdRole,
                 Balance = balance,
                 CreatedAt_EnglishDate = nowDateTime,
                 CreatedAt_PersianDate = nowPersianDateTime
@@ -55,20 +58,24 @@ public class Account : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    public void Active(IDateTime dateTime, string updatedBy)
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
+    public void Active(IDateTime dateTime, string updatedBy, string updatedRole)
     {
         var nowDateTime = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
         IsActive = IsActive.Active;
         UpdatedBy = updatedBy;
+        UpdatedRole = updatedRole;
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new AccountActived {
                 Id = Id,
                 UpdatedBy = updatedBy,
-                UpdatedRole = "",
+                UpdatedRole = updatedRole,
                 IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
@@ -79,20 +86,24 @@ public class Account : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    public void InActive(IDateTime dateTime, string updatedBy)
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
+    public void InActive(IDateTime dateTime, string updatedBy, string updatedRole)
     {
         var nowDateTime = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
         IsActive = IsActive.InActive;
         UpdatedBy = updatedBy;
+        UpdatedRole = updatedRole;
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new AccountInActived {
                 Id = Id,
                 UpdatedBy = updatedBy,
-                UpdatedRole = "",
+                UpdatedRole = updatedRole,
                 IsActive = IsActive == IsActive.Active,
                 UpdatedAt_EnglishDate = nowDateTime,
                 UpdatedAt_PersianDate = nowPersianDateTime
