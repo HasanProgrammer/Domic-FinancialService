@@ -6,19 +6,16 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
-public class CommandUnitOfWork : ICommandUnitOfWork
+public class CommandUnitOfWork(SQLContext context) : ICommandUnitOfWork
 {
-    private readonly SQLContext   _context;
     private IDbContextTransaction _transaction;
 
-    public CommandUnitOfWork(SQLContext context) => _context = context; //Resource
-
     public void Transaction(IsolationLevel isolationLevel) 
-        => _transaction = _context.Database.BeginTransaction(isolationLevel); //Resource
+        => _transaction = context.Database.BeginTransaction(isolationLevel); //Resource
 
     public void Commit()
     {
-        _context.SaveChanges();
+        context.SaveChanges();
         _transaction.Commit();
     }
 
