@@ -5,7 +5,7 @@ using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
 using Domic.Domain.Account.Events;
-using Domic.Domain.Account.ValueObjects;
+using Domic.Domain.Commons.ValueObjects;
 
 namespace Domic.Domain.Account.Entities;
 
@@ -15,11 +15,13 @@ public class Account : Entity<string>
     
     //Value Objects
     
-    public Balance Balance { get; private set; }
+    public Amount Balance { get; private set; }
 
     /*---------------------------------------------------------------*/
     
     //Relations
+    
+    public ICollection<Transaction.Entities.Transaction> Transactions { get; set; }
 
     /*---------------------------------------------------------------*/
 
@@ -47,7 +49,7 @@ public class Account : Entity<string>
         UserId = userId;
         CreatedBy = createdBy;
         CreatedRole = createdRole;
-        Balance = new Balance(balance);
+        Balance = new Amount(balance);
         CreatedAt = new CreatedAt(nowDateTime, nowPersianDateTime);
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
