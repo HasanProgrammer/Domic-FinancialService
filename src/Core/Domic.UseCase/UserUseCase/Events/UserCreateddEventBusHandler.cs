@@ -6,7 +6,7 @@ using Domic.Domain.User.Events;
 
 namespace Domic.UseCase.UserUseCase.Events;
 
-public class UserActivedEventBusHandler(IAccountCommandRepository accountCommandRepository, IDateTime dateTime) 
+public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommandRepository, IDateTime dateTime) 
     : IConsumerEventBusHandler<UserActived>
 {
     public void Handle(UserActived @event){}

@@ -2,7 +2,7 @@
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Account.Contracts.Interfaces;
-using Domic.Domain.Account.Events;
+using Domic.Domain.User.Events;
 
 namespace Domic.UseCase.UserUseCase.Events;
 
@@ -14,9 +14,12 @@ public class UserInActivedEventBusHandler(IAccountCommandRepository accountComma
     [WithTransaction]
     public async Task HandleAsync(UserActived @event, CancellationToken cancellationToken)
     {
-        var account = await accountCommandRepository.FindByUserIdAsync(@event.Id, cancellationToken);
+        var account = await accountCommandRepository.FindByUserIdEagerLoadingAsync(@event.Id, cancellationToken);
         
-        account.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
+        account.InActive(dateTime, @event.UpdatedBy, @event.UpdatedRole);
+        
+        foreach (var transaction in account.Transactions)
+            transaction.InActive(dateTime, @event.UpdatedBy, @event.UpdatedRole);
         
         accountCommandRepository.Change(account);
     }

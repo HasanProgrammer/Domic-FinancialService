@@ -9,6 +9,11 @@ public class AccountCommandRepository(SQLContext context) : IAccountCommandRepos
 {
     public Task<Account> FindByUserIdAsync(string userId, CancellationToken cancellationToken) 
         => context.Accounts.FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
+    
+    public Task<Account> FindByUserIdEagerLoadingAsync(string userId, CancellationToken cancellationToken) 
+        => context.Accounts
+                  .Include(account => account.Transactions)
+                  .FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
 
     public void Change(Account entity) => context.Accounts.Update(entity);
 }

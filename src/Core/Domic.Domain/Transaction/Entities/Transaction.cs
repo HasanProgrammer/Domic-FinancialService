@@ -2,6 +2,7 @@
 
 using Domic.Core.Domain.Contracts.Abstracts;
 using Domic.Core.Domain.Contracts.Interfaces;
+using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
 using Domic.Domain.Commons.ValueObjects;
 using Domic.Domain.Transaction.Enumerations;
@@ -89,4 +90,50 @@ public class Transaction : Entity<string>
     /*---------------------------------------------------------------*/
     
     //Behaviors
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
+    /// <param name="withRaisingEvent"></param>
+    public void Active(IDateTime dateTime, string updatedBy, string updatedRole, bool withRaisingEvent = false)
+    {
+        var nowDateTime = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        IsActive = IsActive.Active;
+        UpdatedBy = updatedBy;
+        UpdatedRole = updatedRole;
+        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+
+        if (withRaisingEvent)
+        {
+            //Throw event
+        }
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
+    /// <param name="withRaisingEvent"></param>
+    public void InActive(IDateTime dateTime, string updatedBy, string updatedRole, bool withRaisingEvent = false)
+    {
+        var nowDateTime = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        IsActive = IsActive.InActive;
+        UpdatedBy = updatedBy;
+        UpdatedRole = updatedRole;
+        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        if (withRaisingEvent)
+        {
+            //Throw event
+        }
+    }
 }
