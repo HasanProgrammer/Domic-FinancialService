@@ -2,25 +2,26 @@
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Account.Contracts.Interfaces;
+using Domic.Domain.Account.Entities;
 using Domic.Domain.User.Events;
 
 namespace Domic.UseCase.UserUseCase.Events;
 
-public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommandRepository, IDateTime dateTime) 
-    : IConsumerEventBusHandler<UserActived>
+public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommandRepository, IDateTime dateTime,
+    IGlobalUniqueIdGenerator globalUniqueIdGenerator
+) : IConsumerEventBusHandler<UserCreated>
 {
-    public void Handle(UserActived @event){}
+    public void Handle(UserCreated @event){}
 
     [WithTransaction]
-    public async Task HandleAsync(UserActived @event, CancellationToken cancellationToken)
+    public Task HandleAsync(UserCreated @event, CancellationToken cancellationToken)
     {
-        var account = await accountCommandRepository.FindByUserIdEagerLoadingAsync(@event.Id, cancellationToken);
+        var newAccount = new Account(globalUniqueIdGenerator, dateTime, @event.Id, @event.CreatedBy,
+            @event.CreatedRole, 0
+        );
         
-        account.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
-
-        foreach (var transaction in account.Transactions)
-            transaction.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
+        accountCommandRepository.Add(newAccount);
         
-        accountCommandRepository.Change(account);
+        return Task.CompletedTask;
     }
 }
