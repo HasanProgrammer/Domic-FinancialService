@@ -8,7 +8,7 @@ namespace Domic.UseCase.TransactionUseCase.Commands.Create;
 
 public class CreateTransactionCommandHandler(
     ITransactionCommandRepository transactionCommandRepository, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
-    IDateTime dateTime
+    IDateTime dateTime, ISerializer serializer
 ) : ICommandHandler<CreateTransactionCommand, bool>
 {
     [WithTransaction]
@@ -16,7 +16,7 @@ public class CreateTransactionCommandHandler(
     {
         var newTransaction = new Transaction(globalUniqueIdGenerator, dateTime, command.AccountId,
             command.TransactionId, command.IncreasedAmount, command.DecreasedAmount, command.TransactionType,
-            "", ""
+            command.UserId, serializer.Serialize(command.UserRoles)
         );
         
         transactionCommandRepository.Add(newTransaction);
