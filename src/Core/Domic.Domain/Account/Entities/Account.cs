@@ -21,7 +21,7 @@ public class Account : Entity<string>
     
     //Relations
     
-    public ICollection<Transaction.Entities.Transaction> Transactions { get; set; }
+    public ICollection<GiftTransaction.Entities.GiftTransaction> GiftTransactions { get; set; }
 
     /*---------------------------------------------------------------*/
 

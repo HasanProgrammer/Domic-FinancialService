@@ -1,25 +1,25 @@
 ﻿using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
-using Domic.Domain.Transaction.Contracts.Interfaces;
-using Domic.Domain.Transaction.Entities;
+using Domic.Domain.GiftTransaction.Contracts.Interfaces;
+using Domic.Domain.GiftTransaction.Entities;
 
-namespace Domic.UseCase.TransactionUseCase.Commands.Create;
+namespace Domic.UseCase.GiftTransactionUseCase.Commands.Create;
 
-public class CreateTransactionCommandHandler(
-    ITransactionCommandRepository transactionCommandRepository, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
+public class CreateGiftTransactionCommandHandler(
+    IGiftTransactionCommandRepository GiftTransactionCommandRepository, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
     IDateTime dateTime, ISerializer serializer
-) : ICommandHandler<CreateTransactionCommand, bool>
+) : ICommandHandler<CreateGiftTransactionCommand, bool>
 {
     [WithTransaction]
-    public Task<bool> HandleAsync(CreateTransactionCommand command, CancellationToken cancellationToken)
+    public Task<bool> HandleAsync(CreateGiftTransactionCommand command, CancellationToken cancellationToken)
     {
-        var newTransaction = new Transaction(globalUniqueIdGenerator, dateTime, command.AccountId,
-            command.TransactionId, command.IncreasedAmount, command.DecreasedAmount, command.TransactionType,
+        var newGiftTransaction = new GiftTransaction(globalUniqueIdGenerator, dateTime, command.AccountId,
+            command.GiftTransactionId, command.IncreasedAmount, command.DecreasedAmount, command.TransactionType,
             command.UserId, serializer.Serialize(command.UserRoles)
         );
         
-        transactionCommandRepository.Add(newTransaction);
+        GiftTransactionCommandRepository.Add(newGiftTransaction);
 
         return Task.FromResult(true);
     }

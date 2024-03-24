@@ -5,7 +5,7 @@ using Domic.Persistence.Contexts.C;
 
 namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
-//Transaction
+//GiftTransaction
 public partial class EventCommandRepository(SQLContext context) : IEventCommandRepository
 {
     public async Task AddAsync(Event entity, CancellationToken cancellationToken) 

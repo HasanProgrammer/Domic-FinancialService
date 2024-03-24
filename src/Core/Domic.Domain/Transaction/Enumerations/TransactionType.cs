@@ -1,4 +1,4 @@
-﻿namespace Domic.Domain.Transaction.Enumerations;
+﻿namespace Domic.Domain.GiftTransaction.Enumerations;
 
 public enum TransactionType : byte
 {

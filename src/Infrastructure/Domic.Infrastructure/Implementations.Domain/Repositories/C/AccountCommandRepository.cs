@@ -12,7 +12,7 @@ public class AccountCommandRepository(SQLContext context) : IAccountCommandRepos
     
     public Task<Account> FindByUserIdEagerLoadingAsync(string userId, CancellationToken cancellationToken) 
         => context.Accounts
-                  .Include(account => account.Transactions)
+                  .Include(account => account.GiftTransactions)
                   .FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
 
     public void Change(Account entity) => context.Accounts.Update(entity);

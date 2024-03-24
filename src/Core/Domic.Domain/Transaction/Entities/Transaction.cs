@@ -5,12 +5,12 @@ using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
 using Domic.Domain.Commons.ValueObjects;
-using Domic.Domain.Transaction.Enumerations;
-using Domic.Domain.Transaction.Events;
+using Domic.Domain.GiftTransaction.Enumerations;
+using Domic.Domain.GiftTransaction.Events;
 
-namespace Domic.Domain.Transaction.Entities;
+namespace Domic.Domain.GiftTransaction.Entities;
 
-public class Transaction : Entity<string>
+public class GiftTransaction : Entity<string>
 {
     public string AccountId { get; private set; }
     public string TransactionId { get; private set; }
@@ -29,14 +29,14 @@ public class Transaction : Entity<string>
     
     public Account.Entities.Account Account { get; set; }
     
-    public Transaction Parent { get; set; }
+    public GiftTransaction Parent { get; set; }
     
-    public ICollection<Transaction> Childs { get; set; }
+    public ICollection<GiftTransaction> Childs { get; set; }
 
     /*---------------------------------------------------------------*/
 
     //EF Core
-    private Transaction() {}
+    private GiftTransaction() {}
     
     /// <summary>
     /// 
@@ -50,7 +50,7 @@ public class Transaction : Entity<string>
     /// <param name="transactionType"></param>
     /// <param name="createdBy"></param>
     /// <param name="createdRole"></param>
-    public Transaction(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string accountId,
+    public GiftTransaction(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string accountId,
         string transactionId, long? increasedAmount, long? decreasedAmount, TransactionType transactionType, 
         string createdBy, string createdRole
     )
@@ -74,10 +74,10 @@ public class Transaction : Entity<string>
         CreatedAt = new CreatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
-            new TransactionCreated {
+            new GiftTransactionCreated {
                 Id = uniqueId,
                 AccountId = accountId,
-                TransactionId = transactionId,
+                GiftTransactionId = transactionId,
                 TransactionType = transactionType,
                 IncreasedAmount = increasedAmount,
                 DecreasedAmount = decreasedAmount,

@@ -28,8 +28,8 @@ public class AccountConfig : BaseEntityConfig<Account, string>
         
         //Relations
         
-        builder.HasMany(account => account.Transactions)
-               .WithOne(transaction => transaction.Account)
-               .HasForeignKey(transaction => transaction.AccountId);
+        builder.HasMany(account => account.GiftTransactions)
+               .WithOne(GiftTransaction => GiftTransaction.Account)
+               .HasForeignKey(GiftTransaction => GiftTransaction.AccountId);
     }
 }

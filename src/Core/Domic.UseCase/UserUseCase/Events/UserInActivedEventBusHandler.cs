@@ -18,8 +18,8 @@ public class UserInActivedEventBusHandler(IAccountCommandRepository accountComma
         
         account.InActive(dateTime, @event.UpdatedBy, @event.UpdatedRole);
         
-        foreach (var transaction in account.Transactions)
-            transaction.InActive(dateTime, @event.UpdatedBy, @event.UpdatedRole);
+        foreach (var GiftTransaction in account.GiftTransactions)
+            GiftTransaction.InActive(dateTime, @event.UpdatedBy, @event.UpdatedRole);
         
         accountCommandRepository.Change(account);
     }

@@ -1,15 +1,15 @@
 using Domic.Core.Persistence.Configs;
-using Domic.Domain.Transaction.Entities;
-using Domic.Domain.Transaction.Enumerations;
+using Domic.Domain.GiftTransaction.Entities;
+using Domic.Domain.GiftTransaction.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domic.Persistence.Configs.C;
 
-public class TransactionConfig : BaseEntityConfig<Transaction, string>
+public class GiftTransactionConfig : BaseEntityConfig<GiftTransaction, string>
 {
-    public override void Configure(EntityTypeBuilder<Transaction> builder)
+    public override void Configure(EntityTypeBuilder<GiftTransaction> builder)
     {
         base.Configure(builder);
         
@@ -17,9 +17,9 @@ public class TransactionConfig : BaseEntityConfig<Transaction, string>
         
         //Configs
 
-        builder.ToTable("Transactions");
+        builder.ToTable("GiftTransactions");
 
-        builder.Property(transaction => transaction.AccountId).IsRequired();
+        builder.Property(GiftTransaction => GiftTransaction.AccountId).IsRequired();
         
         builder.Property(entity => entity.TransactionType)
                .HasConversion(new EnumToNumberConverter<TransactionType, byte>())
@@ -37,12 +37,12 @@ public class TransactionConfig : BaseEntityConfig<Transaction, string>
         
         //Relations
 
-        builder.HasOne(transaction => transaction.Account)
-               .WithMany(account => account.Transactions)
-               .HasForeignKey(transaction => transaction.AccountId);
+        builder.HasOne(GiftTransaction => GiftTransaction.Account)
+               .WithMany(account => account.GiftTransactions)
+               .HasForeignKey(GiftTransaction => GiftTransaction.AccountId);
         
-        builder.HasOne(transaction => transaction.Parent)
-               .WithMany(transaction => transaction.Childs)
-               .HasForeignKey(transaction => transaction.TransactionId);
+        builder.HasOne(GiftTransaction => GiftTransaction.Parent)
+               .WithMany(GiftTransaction => GiftTransaction.Childs)
+               .HasForeignKey(GiftTransaction => GiftTransaction.TransactionId);
     }
 }

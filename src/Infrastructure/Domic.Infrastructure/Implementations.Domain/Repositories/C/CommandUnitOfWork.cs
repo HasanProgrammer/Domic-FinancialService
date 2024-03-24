@@ -8,18 +8,18 @@ namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
 public class CommandUnitOfWork(SQLContext context) : ICommandUnitOfWork
 {
-    private IDbContextTransaction _transaction;
+    private IDbContextTransaction _GiftTransaction;
 
-    public void Transaction(IsolationLevel isolationLevel) 
-        => _transaction = context.Database.BeginTransaction(isolationLevel); //Resource
+    public void GiftTransaction(IsolationLevel isolationLevel) 
+        => _GiftTransaction = context.Database.BeginTransaction(isolationLevel); //Resource
 
     public void Commit()
     {
         context.SaveChanges();
-        _transaction.Commit();
+        _GiftTransaction.Commit();
     }
 
-    public void Rollback() => _transaction?.Rollback();
+    public void Rollback() => _GiftTransaction?.Rollback();
 
-    public void Dispose() => _transaction?.Dispose();
+    public void Dispose() => _GiftTransaction?.Dispose();
 }
