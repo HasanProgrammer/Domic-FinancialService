@@ -1,25 +1,35 @@
+using Domic.Core.Persistence.Configs;
 using Domic.Domain.Account.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domic.Persistence.Configs.C;
 
-public class AccountConfig : IEntityTypeConfiguration<Account>
+public class AccountConfig : BaseEntityConfig<Account, string>
 {
-    public void Configure(EntityTypeBuilder<Account> builder)
+    public override void Configure(EntityTypeBuilder<Account> builder)
     {
-        //PrimaryKey
-        
-        builder.HasKey(account => account.Id);
-
-        builder.ToTable("Accounts");
+        base.Configure(builder);
         
         /*-----------------------------------------------------------*/
+        
+        //Configs
 
-        //Property
+        builder.ToTable("Accounts");
 
+        builder.Property(account => account.UserId).IsRequired();
+        
+        builder.OwnsOne(account => account.Balance)
+               .Property(account => account.Value)
+               .IsRequired()
+               .HasColumnName("Balance");
+        
         /*-----------------------------------------------------------*/
         
         //Relations
+        
+        builder.HasMany(account => account.Transactions)
+               .WithOne(transaction => transaction.Account)
+               .HasForeignKey(transaction => transaction.AccountId);
     }
 }

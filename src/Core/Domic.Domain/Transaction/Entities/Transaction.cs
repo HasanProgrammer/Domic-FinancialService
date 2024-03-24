@@ -30,6 +30,8 @@ public class Transaction : Entity<string>
     public Account.Entities.Account Account { get; set; }
     
     public Transaction Parent { get; set; }
+    
+    public ICollection<Transaction> Childs { get; set; }
 
     /*---------------------------------------------------------------*/
 
