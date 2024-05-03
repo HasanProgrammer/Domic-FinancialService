@@ -1,4 +1,5 @@
-﻿using Domic.Core.Domain.Contracts.Interfaces;
+﻿using Domic.Core.Common.ClassConsts;
+using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Account.Contracts.Interfaces;
@@ -13,7 +14,7 @@ public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommand
 {
     public void Handle(UserCreated @event){}
 
-    [WithTransaction]
+    [TransactionConfig(Type = TransactionType.Command)]
     public Task HandleAsync(UserCreated @event, CancellationToken cancellationToken)
     {
         var newAccount = new Account(globalUniqueIdGenerator, dateTime, @event.Id, @event.CreatedBy,

@@ -17,6 +17,7 @@
       "applicationUrl": "https://localhost:2001;http://localhost:2000",
       "environmentVariables": {
         "Elastic-Host": "http://localhost:9200",
+        "Elastic-Index": "financial",
         "Elastic-Username": "",
         "Elastic-Password": "",
         "E-RabbitMQ-Host": "localhost",

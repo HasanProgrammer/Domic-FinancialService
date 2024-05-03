@@ -19,6 +19,7 @@ public partial class SQLContext : DbContext
 public partial class SQLContext
 {
     public DbSet<Event> Events { get; set; }
+    public DbSet<ConsumerEvent> ConsumerEvents { get; set; }
     public DbSet<Account> Accounts { get; set; }
 }
 
@@ -30,6 +31,7 @@ public partial class SQLContext
         base.OnModelCreating(builder);
         
         builder.ApplyConfiguration(new EventConfig());
+        builder.ApplyConfiguration(new ConsumerEventConfig());
         builder.ApplyConfiguration(new AccountConfig());
     }
 }
