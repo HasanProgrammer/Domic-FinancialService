@@ -23,7 +23,7 @@ builder.RegisterGrpcServer();
 builder.RegisterEntityFrameworkCoreCommand<SQLContext, string>();
 builder.RegisterCommandQueryUseCases();
 builder.RegisterCommandRepositories();
-builder.RegisterRedisCaching();
+builder.RegisterDistributedCaching();
 builder.RegisterMessageBroker();
 builder.RegisterEventsPublisher();
 builder.RegisterEventsSubscriber();
@@ -77,4 +77,4 @@ application.Run();
 
 //For Integration Test
 
-public partial class Program {}
+public partial class Program;

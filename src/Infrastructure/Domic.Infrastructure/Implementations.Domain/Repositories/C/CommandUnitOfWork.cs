@@ -8,18 +8,46 @@ namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
 public class CommandUnitOfWork(SQLContext context) : ICommandUnitOfWork
 {
-    private IDbContextTransaction _GiftTransaction;
+    private IDbContextTransaction _transaction;
 
-    public void GiftTransaction(IsolationLevel isolationLevel) 
-        => _GiftTransaction = context.Database.BeginTransaction(isolationLevel); //Resource
+    public void Transaction(IsolationLevel isolationLevel) 
+        => _transaction = context.Database.BeginTransaction(isolationLevel); //Resource
+
+    public async Task TransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
+        CancellationToken cancellationToken = new CancellationToken())
+    {
+        _transaction = await context.Database.BeginTransactionAsync(isolationLevel, cancellationToken); //Resource
+    }
 
     public void Commit()
     {
         context.SaveChanges();
-        _GiftTransaction.Commit();
+        _transaction.Commit();
     }
 
-    public void Rollback() => _GiftTransaction?.Rollback();
+    public async Task CommitAsync(CancellationToken cancellationToken)
+    {
+        await context.SaveChangesAsync(cancellationToken);
+        await _transaction.CommitAsync(cancellationToken);
+    }
 
-    public void Dispose() => _GiftTransaction?.Dispose();
+    public void Rollback() => _transaction.Rollback();
+
+    public Task RollbackAsync(CancellationToken cancellationToken)
+    {
+        if (_transaction is not null)
+            return _transaction.RollbackAsync(cancellationToken);
+
+        return Task.CompletedTask;
+    }
+
+    public void Dispose() => _transaction?.Dispose();
+
+    public ValueTask DisposeAsync()
+    {
+        if (_transaction is not null)
+            return _transaction.DisposeAsync();
+
+        return ValueTask.CompletedTask;
+    }
 }

@@ -27,7 +27,8 @@ services:
       - I-RabbitMQ-Port=
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
-      - RedisConnectionString=domic.financial.redis:6379
+      - E-RedisConnectionString=domic.financial.redis:6379
+      - I-RedisConnectionString=domic.financial.redis:6379
       - MongoConnectionString=
       - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=financialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
       - Q-SqlServerConnectionString=Server=domic.financial.query.sql.server,1433;Database=financialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
