@@ -5,7 +5,7 @@ using Domic.Domain.GiftTransaction.Enumerations;
 
 namespace Domic.Domain.GiftTransaction.Events;
 
-[EventConfig(ExchangeType = Exchange.FanOut, Exchange = "Financial_GiftTransaction_Exchange", Queue = "Financial_GiftTransaction_Queue")]
+[EventConfig(ExchangeType = Exchange.FanOut, Exchange = "Financial_GiftTransaction_Exchange")]
 public class GiftTransactionCreated : CreateDomainEvent<string>
 {
     public required string AccountId { get; init; }
