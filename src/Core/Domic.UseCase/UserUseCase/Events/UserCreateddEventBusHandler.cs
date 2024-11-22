@@ -12,7 +12,7 @@ public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommand
     IGlobalUniqueIdGenerator globalUniqueIdGenerator
 ) : IConsumerEventBusHandler<UserCreated>
 {
-    public void Handle(UserCreated @event){}
+    public Task BeforeHandleAsync(UserCreated @event, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [TransactionConfig(Type = TransactionType.Command)]
     public Task HandleAsync(UserCreated @event, CancellationToken cancellationToken)
@@ -25,4 +25,6 @@ public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommand
         
         return Task.CompletedTask;
     }
+
+    public Task AfterHandleAsync(UserCreated @event, CancellationToken cancellationToken) => Task.CompletedTask;
 }

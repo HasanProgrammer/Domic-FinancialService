@@ -11,6 +11,9 @@ public class CreateGiftTransactionCommandHandler(
     IDateTime dateTime, ISerializer serializer
 ) : ICommandHandler<CreateGiftTransactionCommand, bool>
 {
+    public Task BeforeHandleAsync(CreateGiftTransactionCommand command, CancellationToken cancellationToken) 
+        => Task.CompletedTask;
+
     [WithTransaction]
     public Task<bool> HandleAsync(CreateGiftTransactionCommand command, CancellationToken cancellationToken)
     {
@@ -23,5 +26,7 @@ public class CreateGiftTransactionCommandHandler(
 
         return Task.FromResult(true);
     }
-        
+
+    public Task AfterHandleAsync(CreateGiftTransactionCommand command, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 }

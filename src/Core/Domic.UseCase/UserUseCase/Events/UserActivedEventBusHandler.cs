@@ -10,7 +10,7 @@ namespace Domic.UseCase.UserUseCase.Events;
 public class UserActivedEventBusHandler(IAccountCommandRepository accountCommandRepository, IDateTime dateTime) 
     : IConsumerEventBusHandler<UserActived>
 {
-    public void Handle(UserActived @event){}
+    public Task BeforeHandleAsync(UserActived @event, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [TransactionConfig(Type = TransactionType.Command)]
     public async Task HandleAsync(UserActived @event, CancellationToken cancellationToken)
@@ -24,4 +24,6 @@ public class UserActivedEventBusHandler(IAccountCommandRepository accountCommand
         
         accountCommandRepository.Change(account);
     }
+
+    public Task AfterHandleAsync(UserActived @event, CancellationToken cancellationToken) => Task.CompletedTask;
 }
