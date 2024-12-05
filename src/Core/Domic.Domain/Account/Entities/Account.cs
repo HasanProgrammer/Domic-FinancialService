@@ -47,11 +47,12 @@ public class Account : Entity<string>
 
         Id = uniqueId;
         UserId = userId;
-        CreatedBy = createdBy;
-        CreatedRole = createdRole;
         Balance = new Amount(balance);
+        
+        //audit
+        CreatedRole = createdRole;
+        CreatedBy = createdBy;
         CreatedAt = new CreatedAt(nowDateTime, nowPersianDateTime);
-        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new AccountCreated {
@@ -109,6 +110,8 @@ public class Account : Entity<string>
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
         IsActive = IsActive.InActive;
+        
+        //audit
         UpdatedBy = updatedBy;
         UpdatedRole = updatedRole;
         UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);

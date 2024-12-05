@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:2001;http://localhost:2000",
+      "applicationUrl": "https://localhost:11001;http://localhost:11000",
       "environmentVariables": {
         "Elastic-Host": "http://localhost:9200",
         "Elastic-Index": "financial",
@@ -37,7 +37,7 @@
         "C-SqlServerConnectionString": "Server=127.0.0.1,1633;Database=C-FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;",
         "Q-SqlServerConnectionString": "",
         "Host": "localhost",
-        "Port": "2001",
+        "Port": "11001",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
