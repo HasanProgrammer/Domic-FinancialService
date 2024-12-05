@@ -20,7 +20,9 @@ public class UserActivedEventBusHandler(IAccountCommandRepository accountCommand
         account.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
 
         foreach (var transaction in account.Transactions)
-            transaction.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
+            transaction.Active(@event.UpdatedAt_EnglishDate, @event.UpdatedAt_PersianDate, @event.UpdatedBy,
+                @event.UpdatedRole
+            );
         
         await accountCommandRepository.ChangeAsync(account, cancellationToken);
     }

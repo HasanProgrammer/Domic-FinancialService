@@ -29,6 +29,7 @@ builder.RegisterEventStreamBroker();
 builder.RegisterEventsPublisher();
 builder.RegisterEventsSubscriber();
 builder.RegisterServices();
+builder.RegisterBankGateway();
 
 builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();

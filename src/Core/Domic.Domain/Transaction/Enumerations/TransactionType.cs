@@ -2,10 +2,6 @@
 
 public enum TransactionType : byte
 {
-    IncreasedAmountWalletFromGift,
-    DecreasedAmountWalletFromGift,
-    IncreasedAmountWalletFromStudent,
-    DecreasedAmountWalletFromStudent,
-    IncreasedAmountWalletFromTeacher,
-    DecreasedAmountWalletFromTeacher
+    IncreasedAmount,
+    DecreasedAmount
 }

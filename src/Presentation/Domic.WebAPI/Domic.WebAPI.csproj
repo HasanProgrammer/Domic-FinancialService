@@ -16,6 +16,7 @@
   
   <ItemGroup>
     <Folder Include="EntryPoints" />
+    <Folder Include="EntryPoints\GRPCs\Public\" />
   </ItemGroup>
 
   <ItemGroup>

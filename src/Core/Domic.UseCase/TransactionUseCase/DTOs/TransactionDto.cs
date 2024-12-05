@@ -1,3 +1,3 @@
 namespace Domic.UseCase.TransactionUseCase.DTOs;
 
-public class GiftTransactionDto;
+public class TransactionDto;
