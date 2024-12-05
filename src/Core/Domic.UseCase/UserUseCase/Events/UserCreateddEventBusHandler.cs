@@ -21,9 +21,7 @@ public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommand
             @event.CreatedRole, 0
         );
         
-        accountCommandRepository.Add(newAccount);
-        
-        return Task.CompletedTask;
+        return accountCommandRepository.AddAsync(newAccount, cancellationToken);
     }
 
     public Task AfterHandleAsync(UserCreated @event, CancellationToken cancellationToken) => Task.CompletedTask;

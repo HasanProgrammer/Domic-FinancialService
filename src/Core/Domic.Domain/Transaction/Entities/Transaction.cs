@@ -5,15 +5,14 @@ using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
 using Domic.Domain.Commons.ValueObjects;
-using Domic.Domain.GiftTransaction.Enumerations;
-using Domic.Domain.GiftTransaction.Events;
+using Domic.Domain.Transaction.Enumerations;
+using Domic.Domain.Transaction.Events;
 
-namespace Domic.Domain.GiftTransaction.Entities;
+namespace Domic.Domain.Transaction.Entities;
 
-public class GiftTransaction : Entity<string>
+public class Transaction : Entity<string>
 {
     public string AccountId { get; private set; }
-    public string TransactionId { get; private set; }
     public TransactionType TransactionType { get; private set; }
     
     /*---------------------------------------------------------------*/
@@ -28,15 +27,11 @@ public class GiftTransaction : Entity<string>
     //Relations
     
     public Account.Entities.Account Account { get; set; }
-    
-    public GiftTransaction Parent { get; set; }
-    
-    public ICollection<GiftTransaction> Childs { get; set; }
 
     /*---------------------------------------------------------------*/
 
     //EF Core
-    private GiftTransaction() {}
+    private Transaction() {}
     
     /// <summary>
     /// 
@@ -44,15 +39,14 @@ public class GiftTransaction : Entity<string>
     /// <param name="globalUniqueIdGenerator"></param>
     /// <param name="dateTime"></param>
     /// <param name="accountId"></param>
-    /// <param name="transactionId"></param>
     /// <param name="increasedAmount"></param>
     /// <param name="decreasedAmount"></param>
     /// <param name="transactionType"></param>
     /// <param name="createdBy"></param>
     /// <param name="createdRole"></param>
-    public GiftTransaction(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string accountId,
-        string transactionId, long? increasedAmount, long? decreasedAmount, TransactionType transactionType, 
-        string createdBy, string createdRole
+    public Transaction(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string accountId,
+        long? increasedAmount, long? decreasedAmount, TransactionType transactionType, string createdBy, 
+        string createdRole
     )
     {
         var uniqueId = globalUniqueIdGenerator.GetRandom(6);
@@ -61,7 +55,6 @@ public class GiftTransaction : Entity<string>
 
         Id = uniqueId;
         AccountId = accountId;
-        TransactionId = transactionId;
         CreatedBy = createdBy;
         CreatedRole = createdRole;
         
@@ -74,10 +67,9 @@ public class GiftTransaction : Entity<string>
         CreatedAt = new CreatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
-            new GiftTransactionCreated {
+            new TransactionCreated {
                 Id = uniqueId,
                 AccountId = accountId,
-                GiftTransactionId = transactionId,
                 TransactionType = transactionType,
                 IncreasedAmount = increasedAmount,
                 DecreasedAmount = decreasedAmount,

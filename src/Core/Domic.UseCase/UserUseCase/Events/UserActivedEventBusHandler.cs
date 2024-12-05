@@ -19,10 +19,10 @@ public class UserActivedEventBusHandler(IAccountCommandRepository accountCommand
         
         account.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
 
-        foreach (var GiftTransaction in account.GiftTransactions)
-            GiftTransaction.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
+        foreach (var transaction in account.Transactions)
+            transaction.Active(dateTime, @event.UpdatedBy, @event.UpdatedRole);
         
-        accountCommandRepository.Change(account);
+        await accountCommandRepository.ChangeAsync(account, cancellationToken);
     }
 
     public Task AfterHandleAsync(UserActived @event, CancellationToken cancellationToken) => Task.CompletedTask;

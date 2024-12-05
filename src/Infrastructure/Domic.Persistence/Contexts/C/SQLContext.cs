@@ -2,6 +2,7 @@ using Domic.Persistence.Configs.C;
 using Domic.Core.Domain.Entities;
 using Domic.Core.Persistence.Configs;
 using Domic.Domain.Account.Entities;
+using Domic.Domain.Transaction.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domic.Persistence.Contexts.C;
@@ -21,6 +22,7 @@ public partial class SQLContext
     public DbSet<Event> Events { get; set; }
     public DbSet<ConsumerEvent> ConsumerEvents { get; set; }
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 }
 
 /*Config*/
@@ -33,5 +35,6 @@ public partial class SQLContext
         builder.ApplyConfiguration(new EventConfig());
         builder.ApplyConfiguration(new ConsumerEventConfig());
         builder.ApplyConfiguration(new AccountConfig());
+        builder.ApplyConfiguration(new TransactionConfig());
     }
 }

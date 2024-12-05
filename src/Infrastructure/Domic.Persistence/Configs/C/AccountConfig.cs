@@ -28,7 +28,7 @@ public class AccountConfig : BaseEntityConfig<Account, string>
         
         //Relations
         
-        builder.HasMany(account => account.GiftTransactions)
+        builder.HasMany(account => account.Transactions)
                .WithOne(GiftTransaction => GiftTransaction.Account)
                .HasForeignKey(GiftTransaction => GiftTransaction.AccountId);
     }

@@ -12,8 +12,20 @@ public class AccountCommandRepository(SQLContext context) : IAccountCommandRepos
     
     public Task<Account> FindByUserIdEagerLoadingAsync(string userId, CancellationToken cancellationToken) 
         => context.Accounts
-                  .Include(account => account.GiftTransactions)
+                  .Include(account => account.Transactions)
                   .FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
 
-    public void Change(Account entity) => context.Accounts.Update(entity);
+    public Task ChangeAsync(Account entity, CancellationToken cancellationToken)
+    {
+        context.Accounts.Update(entity);
+
+        return Task.CompletedTask;
+    }
+
+    public Task AddAsync(Account entity, CancellationToken cancellationToken)
+    {
+        context.Accounts.Add(entity);
+
+        return Task.CompletedTask;
+    }
 }

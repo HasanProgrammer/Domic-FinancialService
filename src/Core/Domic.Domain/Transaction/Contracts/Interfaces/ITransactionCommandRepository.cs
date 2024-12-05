@@ -1,5 +1,5 @@
 using Domic.Core.Domain.Contracts.Interfaces;
 
-namespace Domic.Domain.GiftTransaction.Contracts.Interfaces;
+namespace Domic.Domain.Transaction.Contracts.Interfaces;
 
-public interface IGiftTransactionCommandRepository : ICommandRepository<GiftTransaction.Entities.GiftTransaction, string>;
+public interface ITransactionCommandRepository : ICommandRepository<Entities.Transaction, string>;

@@ -1,32 +1,32 @@
 ﻿using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
-using Domic.Domain.GiftTransaction.Contracts.Interfaces;
-using Domic.Domain.GiftTransaction.Entities;
+using Domic.Domain.Transaction.Contracts.Interfaces;
+using Domic.Domain.Transaction.Entities;
 
-namespace Domic.UseCase.GiftTransactionUseCase.Commands.Create;
+namespace Domic.UseCase.TransactionUseCase.Commands.Create;
 
-public class CreateGiftTransactionCommandHandler(
-    IGiftTransactionCommandRepository GiftTransactionCommandRepository, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
+public class CreateTransactionCommandHandler(
+    ITransactionCommandRepository transactionCommandRepository, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
     IDateTime dateTime, ISerializer serializer
-) : ICommandHandler<CreateGiftTransactionCommand, bool>
+) : ICommandHandler<CreateTransactionCommand, bool>
 {
-    public Task BeforeHandleAsync(CreateGiftTransactionCommand command, CancellationToken cancellationToken) 
+    public Task BeforeHandleAsync(CreateTransactionCommand command, CancellationToken cancellationToken) 
         => Task.CompletedTask;
 
     [WithTransaction]
-    public Task<bool> HandleAsync(CreateGiftTransactionCommand command, CancellationToken cancellationToken)
+    public async Task<bool> HandleAsync(CreateTransactionCommand command, CancellationToken cancellationToken)
     {
-        var newGiftTransaction = new GiftTransaction(globalUniqueIdGenerator, dateTime, command.AccountId,
-            command.GiftTransactionId, command.IncreasedAmount, command.DecreasedAmount, command.TransactionType,
+        var newTransaction = new Transaction(globalUniqueIdGenerator, dateTime, command.AccountId, 
+            command.IncreasedAmount, command.DecreasedAmount, command.TransactionType,
             command.UserId, serializer.Serialize(command.UserRoles)
         );
         
-        GiftTransactionCommandRepository.Add(newGiftTransaction);
+        await transactionCommandRepository.AddAsync(newTransaction, cancellationToken);
 
-        return Task.FromResult(true);
+        return true;
     }
 
-    public Task AfterHandleAsync(CreateGiftTransactionCommand command, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(CreateTransactionCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }
