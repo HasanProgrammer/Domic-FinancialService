@@ -1,6 +1,7 @@
 using Domic.Core.Infrastructure.Extensions;
 using Domic.Core.WebAPI.Extensions;
 using Domic.Persistence.Contexts.C;
+using Domic.WebAPI.EntryPoints.GRPCs.Public;
 using Domic.WebAPI.Frameworks.Extensions;
 
 /*-------------------------------------------------------------------*/
@@ -63,6 +64,8 @@ application.UseEndpoints(endpoints => {
     endpoints.HealthCheck(application.Services);
     
     #region GRPC's Services
+
+    endpoints.MapGrpcService<FinancialRPC>();
 
     #endregion
 

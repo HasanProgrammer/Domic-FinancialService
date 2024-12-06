@@ -31,7 +31,9 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
         );
     }
     
-    public async Task<bool> VerificationAsync(ZarinPalVerificationDto dto, CancellationToken cancellationToken)
+    public async Task<(bool result, string transactionNumber)> VerificationAsync(ZarinPalVerificationDto dto,
+        CancellationToken cancellationToken
+    )
     {
         var result = await new Payment().Verification(new DtoVerification {
             Amount     = (int)dto.Amount,
@@ -39,6 +41,6 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
             MerchantId = Environment.GetEnvironmentVariable("ZarinPalMerchentId")
         }, environment.IsDevelopment() ? Payment.Mode.sandbox : Payment.Mode.zarinpal);
 
-        return result.Status == 100;
+        return ( result.Status == 100 , result.RefId.ToString() );
     }
 }
