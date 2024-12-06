@@ -1,4 +1,5 @@
 ﻿using Domic.Core.Domain.Contracts.Interfaces;
+using Domic.Core.Domain.Enumerations;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Account.Contracts.Interfaces;
@@ -25,38 +26,43 @@ public class PaymentVerificationCommandHandler(
     [WithTransaction]
     public async Task<PaymentVerificationCommandResponse> HandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
     {
-        var verifyDto = new ZarinPalVerificationDto {
-            Amount = command.Amount,
-            Authority = command.BankGatewaySecretKey
-        };
-
-        var response = await zarinPalBankGateway.VerificationAsync(verifyDto, cancellationToken);
-
         var targetTransaction =
             await transactionCommandRepository.FindBySecretConnectionKeyAsync(command.BankGatewaySecretKey,
                 cancellationToken
             );
-        
-        if (response.result)
-        {
-            targetTransaction.Active(dateTime, identityUser, serializer, true);
-            
-            targetTransaction.Account.IncreaseBalance(dateTime, identityUser, serializer, command.Amount);
 
-            await accountCommandRepository.ChangeAsync(targetTransaction.Account, cancellationToken);
-            await transactionCommandRepository.ChangeAsync(targetTransaction, cancellationToken);
+        if (targetTransaction is not null && targetTransaction.IsActive == IsActive.InActive)
+        {
+            var verifyDto = new ZarinPalVerificationDto {
+                Amount = command.Amount,
+                Authority = command.BankGatewaySecretKey
+            };
+
+            var response = await zarinPalBankGateway.VerificationAsync(verifyDto, cancellationToken);
+            
+            if (response.result)
+            {
+                targetTransaction.Active(dateTime, identityUser, serializer, true);
+            
+                targetTransaction.Account.IncreaseBalance(dateTime, identityUser, serializer, command.Amount);
+
+                await accountCommandRepository.ChangeAsync(targetTransaction.Account, cancellationToken);
+                await transactionCommandRepository.ChangeAsync(targetTransaction, cancellationToken);
+            }
+
+            var newLogHistory = new BankGatewayLogHistory(
+                identityUser, dateTime, globalUniqueIdGenerator, serializer, targetTransaction.Id,
+                BankGatewayType.ZarinPal, 
+                response.result ? BankGatewayStatus.SuccessVerificationPurchase : BankGatewayStatus.ErrorVerificationPurchase, 
+                command.BankGatewaySecretKey, response.result ? response.transactionNumber : string.Empty
+            );
+
+            await bankGatewayLogHistoryCommandRepository.AddAsync(newLogHistory, cancellationToken);
+        
+            return new() { Status = response.result , TransactionNumber = response.transactionNumber };
         }
 
-        var newLogHistory = new BankGatewayLogHistory(
-            identityUser, dateTime, globalUniqueIdGenerator, serializer, targetTransaction.Id,
-            BankGatewayType.ZarinPal, 
-            response.result ? BankGatewayStatus.SuccessVerificationPurchase : BankGatewayStatus.ErrorVerificationPurchase, 
-            command.BankGatewaySecretKey, response.result ? response.transactionNumber : string.Empty
-        );
-
-        await bankGatewayLogHistoryCommandRepository.AddAsync(newLogHistory, cancellationToken);
-        
-        return new() { Status = response.result , TransactionNumber = response.transactionNumber };
+        return new() { Status = false , TransactionNumber = string.Empty };
     }
 
     public Task AfterHandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
