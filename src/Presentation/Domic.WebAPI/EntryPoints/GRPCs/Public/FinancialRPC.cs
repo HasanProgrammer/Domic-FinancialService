@@ -5,6 +5,7 @@ using Domic.Domain.Transaction.Enumerations;
 using Domic.UseCase.TransactionUseCase.Commands.Create;
 using Domic.UseCase.TransactionUseCase.Commands.PaymentVerification;
 using Grpc.Core;
+using String = Domic.Core.Financial.Grpc.String;
 
 namespace Domic.WebAPI.EntryPoints.GRPCs.Public;
 
@@ -24,7 +25,7 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
         return new() {
             Code = configuration.GetSuccessStatusCode(),
             Message = configuration.GetSuccessCreateMessage(),
-            Body = new CreateResponseBody { TransactionId = result }
+            Body = new CreateResponseBody { BankGatewayUrl = result }
         };
     }
 
@@ -42,7 +43,9 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
         return new() {
             Code = configuration.GetSuccessStatusCode(),
             Message = configuration.GetSuccessCreateMessage(),
-            Body = new PaymentVerificationResponseBody { Status = result }
+            Body = new PaymentVerificationResponseBody {
+                Status = result.Status , TransactionNumber = new String { Value = result.TransactionNumber }
+            }
         };
     }
 }

@@ -12,7 +12,7 @@ public class Amount : ValueObject
     public Amount(long? value)
     {
         if(value < 0)
-            throw new DomainException("فیلد مبلغ نباید عدد منفی باشد !");
+            throw new DomainException("موجودی شما کافی نمی باشد !");
         
         if (value is null)
             throw new DomainException("فیلد مبلغ نباید خالی باشد !");

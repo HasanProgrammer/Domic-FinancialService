@@ -62,6 +62,8 @@ application.UseRouting();
 application.UseEndpoints(endpoints => {
 
     endpoints.HealthCheck(application.Services);
+
+    endpoints.MapControllers();
     
     #region GRPC's Services
 

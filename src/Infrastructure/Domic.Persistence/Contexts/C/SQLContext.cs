@@ -37,5 +37,6 @@ public partial class SQLContext
         builder.ApplyConfiguration(new ConsumerEventConfig());
         builder.ApplyConfiguration(new AccountConfig());
         builder.ApplyConfiguration(new TransactionConfig());
+        builder.ApplyConfiguration(new BankGatewayLogHistoryConfig());
     }
 }

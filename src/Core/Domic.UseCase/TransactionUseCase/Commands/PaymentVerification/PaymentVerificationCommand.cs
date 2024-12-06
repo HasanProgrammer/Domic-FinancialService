@@ -2,7 +2,7 @@
 
 namespace Domic.UseCase.TransactionUseCase.Commands.PaymentVerification;
 
-public class PaymentVerificationCommand : ICommand<bool>
+public class PaymentVerificationCommand : ICommand<PaymentVerificationCommandResponse>
 {
     public long Amount { get; set; }
     public string BankGatewaySecretKey { get; set; }

@@ -40,5 +40,9 @@ public class TransactionConfig : BaseEntityConfig<Transaction, string>
         builder.HasOne(transaction => transaction.Account)
                .WithMany(account => account.Transactions)
                .HasForeignKey(transaction => transaction.AccountId);
+        
+        builder.HasMany(transaction => transaction.LogHistories)
+               .WithOne(lh => lh.Transaction)
+               .HasForeignKey(lh => lh.TransactionId);
     }
 }

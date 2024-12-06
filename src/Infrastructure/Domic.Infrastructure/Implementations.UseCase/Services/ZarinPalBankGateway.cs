@@ -1,8 +1,10 @@
-﻿using Domic.UseCase.TransactionUseCase.Contracts.Interfaces;
+﻿using System.Net.Http.Json;
+using System.Text;
+using Domic.Core.Infrastructure.Extensions;
+using Domic.Infrastructure.Implementations.UseCase.Services.DTOs;
+using Domic.UseCase.TransactionUseCase.Contracts.Interfaces;
 using Domic.UseCase.TransactionUseCase.DTOs;
-using Dto.Payment;
 using Microsoft.Extensions.Hosting;
-using ZarinPal.Class;
 
 namespace Domic.Infrastructure.Implementations.UseCase.Services;
 
@@ -12,22 +14,34 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
         CancellationToken cancellationToken
     )
     {
-        var result = await new Payment().Request(
-            new DtoRequest {
-                Description = dto.Description,
-                Amount      = (int)dto.Amount,
-                CallbackUrl = Environment.GetEnvironmentVariable("ZarinPalCallbackUrl"),
-                MerchantId  = Environment.GetEnvironmentVariable("ZarinPalMerchentId")
-            }, 
-            environment.IsDevelopment() ? Payment.Mode.sandbox : Payment.Mode.zarinpal
+        var zarinCallbackUrl  = Environment.GetEnvironmentVariable("ZarinPalCallbackUrl");
+        var zarinUrl          = Environment.GetEnvironmentVariable("ZarinPalUrl");
+        var zarinSandBoxUrl   = Environment.GetEnvironmentVariable("ZarinPalSandBoxUrl");
+        var zarinMerchantCode = Environment.GetEnvironmentVariable("ZarinPalMerchentId");
+
+        using var httpClient = new HttpClient();
+
+        var requestDto = new {
+            merchant_id = zarinMerchantCode,
+            callback_url = zarinCallbackUrl,
+            amount = dto.Amount,
+            description = dto.Description
+        };
+
+        var response = await httpClient.PostAsync(
+            environment.IsDevelopment() ? $"https://sandbox.zarinpal.com/pg/v4/payment/request.json" : $"https://payment.zarinpal.com/pg/v4/payment/request.json",
+            new StringContent(requestDto.Serialize(), Encoding.UTF8, "application/json"),
+            cancellationToken
         );
+            
+        var result = await response.Content.ReadFromJsonAsync<ZarinPalResponseDto>(cancellationToken);
 
         return (
-            result.Status == 100 ,
-            environment.IsDevelopment()
-                ? $"{Environment.GetEnvironmentVariable("ZarinPalSandBoxUrl")}/{result.Authority}"
-                : $"{Environment.GetEnvironmentVariable("ZarinPalUrl")}/{result.Authority}" ,
-            result.Authority
+            result.data.code == 100 ,
+            environment.IsDevelopment() 
+                ? $"{zarinSandBoxUrl}/{result.data.authority}?Amount={dto.Amount}"
+                : $"{zarinUrl}/{result.data.authority}?Amount={dto.Amount}",
+            result.data.authority
         );
     }
     
@@ -35,12 +49,24 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
         CancellationToken cancellationToken
     )
     {
-        var result = await new Payment().Verification(new DtoVerification {
-            Amount     = (int)dto.Amount,
-            Authority  = dto.Authority,
-            MerchantId = Environment.GetEnvironmentVariable("ZarinPalMerchentId")
-        }, environment.IsDevelopment() ? Payment.Mode.sandbox : Payment.Mode.zarinpal);
+        var zarinMerchantCode = Environment.GetEnvironmentVariable("ZarinPalMerchentId");
+        
+        using var httpClient = new HttpClient();
 
-        return ( result.Status == 100 , result.RefId.ToString() );
+        var requestDto = new {
+            merchant_id = zarinMerchantCode,
+            amount = dto.Amount,
+            authority = dto.Authority
+        };
+
+        var response = await httpClient.PostAsync(
+            environment.IsDevelopment() ? $"https://sandbox.zarinpal.com/pg/v4/payment/verify.json" : $"https://payment.zarinpal.com/pg/v4/payment/verify.json",
+            new StringContent(requestDto.Serialize(), Encoding.UTF8, "application/json"),
+            cancellationToken
+        );
+            
+        var result = await response.Content.ReadFromJsonAsync<ZarinPalVerificationResponseDto>(cancellationToken);
+
+        return ( result.data.code == 101 , result.data.ref_id.ToString() );
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Domic.Core.Domain.Contracts.Interfaces;
+using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Account.Contracts.Interfaces;
 using Domic.Domain.Transaction.Contracts.Interfaces;
@@ -16,12 +17,13 @@ public class PaymentVerificationCommandHandler(
     ITransactionCommandRepository transactionCommandRepository, IDateTime dateTime, ISerializer serializer,
     [FromKeyedServices("Http2")] IIdentityUser identityUser, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
     IAccountCommandRepository accountCommandRepository
-) : ICommandHandler<PaymentVerificationCommand, bool>
+) : ICommandHandler<PaymentVerificationCommand, PaymentVerificationCommandResponse>
 {
     public Task BeforeHandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 
-    public async Task<bool> HandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
+    [WithTransaction]
+    public async Task<PaymentVerificationCommandResponse> HandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
     {
         var verifyDto = new ZarinPalVerificationDto {
             Amount = command.Amount,
@@ -54,7 +56,7 @@ public class PaymentVerificationCommandHandler(
 
         await bankGatewayLogHistoryCommandRepository.AddAsync(newLogHistory, cancellationToken);
         
-        return response.result;
+        return new() { Status = response.result , TransactionNumber = response.transactionNumber };
     }
 
     public Task AfterHandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
