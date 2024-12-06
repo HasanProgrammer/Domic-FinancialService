@@ -8,7 +8,9 @@ namespace Domic.Infrastructure.Implementations.UseCase.Services;
 
 public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGateway
 {
-    public async Task<(bool result, string url)> RequestAsync(ZarinPalRequestDto dto, CancellationToken cancellationToken)
+    public async Task<(bool result, string url, string secretKey)> RequestAsync(ZarinPalRequestDto dto, 
+        CancellationToken cancellationToken
+    )
     {
         var result = await new Payment().Request(
             new DtoRequest {
@@ -24,7 +26,8 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
             result.Status == 100 ,
             environment.IsDevelopment()
                 ? $"{Environment.GetEnvironmentVariable("ZarinPalSandBoxUrl")}/{result.Authority}"
-                : $"{Environment.GetEnvironmentVariable("ZarinPalUrl")}/{result.Authority}"
+                : $"{Environment.GetEnvironmentVariable("ZarinPalUrl")}/{result.Authority}" ,
+            result.Authority
         );
     }
     

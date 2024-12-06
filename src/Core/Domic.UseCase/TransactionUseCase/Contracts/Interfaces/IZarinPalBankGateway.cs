@@ -4,6 +4,6 @@ namespace Domic.UseCase.TransactionUseCase.Contracts.Interfaces;
 
 public interface IZarinPalBankGateway
 {
-    public Task<(bool result, string url)> RequestAsync(ZarinPalRequestDto dto, CancellationToken cancellationToken);
+    public Task<(bool result, string url, string secretKey)> RequestAsync(ZarinPalRequestDto dto, CancellationToken cancellationToken);
     public Task<bool> VerificationAsync(ZarinPalVerificationDto dto, CancellationToken cancellationToken);
 }

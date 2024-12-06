@@ -23,6 +23,7 @@ public partial class SQLContext
     public DbSet<ConsumerEvent> ConsumerEvents { get; set; }
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<BankGatewayLogHistory> LogHistories { get; set; }
 }
 
 /*Config*/

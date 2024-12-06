@@ -17,7 +17,8 @@ namespace Domic.UseCase.TransactionUseCase.Commands.Create;
 public class CreateCommandHandler(
     ITransactionCommandRepository transactionCommandRepository, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
     IDateTime dateTime, ISerializer serializer, IZarinPalBankGateway bankGateway,
-    [FromKeyedServices("Http2")] IIdentityUser identityUser, IAccountCommandRepository accountCommandRepository
+    [FromKeyedServices("Http2")] IIdentityUser identityUser, IAccountCommandRepository accountCommandRepository,
+    IBankGatewayLogHistoryCommandRepository bankGatewayLogHistoryCommandRepository
 ) : ICommandHandler<CreateCommand, string>
 {
     private readonly object _validationResult;
@@ -40,6 +41,13 @@ public class CreateCommandHandler(
         if (command.TransactionType == TransactionType.IncreasedAmount)
         {
             transaction.InActive(dateTime, identityUser, serializer);
+
+            List<BankGatewayLogHistory> logHistories = new() {
+                new BankGatewayLogHistory(
+                    identityUser, dateTime, globalUniqueIdGenerator, serializer, transaction.Id, BankGatewayType.ZarinPal,
+                    BankGatewayStatus.SendRequest, string.Empty, string.Empty
+                )
+            };
             
             var requestDto = new ZarinPalRequestDto { Amount = command.IncreasedAmount.Value };
 
@@ -47,13 +55,21 @@ public class CreateCommandHandler(
 
             if (gatewayResponse.result)
             {
-                transaction.Active(dateTime, identityUser, serializer);
-                
-                targetAccount.IncreaseBalance(dateTime, identityUser, serializer, command.IncreasedAmount.Value);
+                logHistories.Add(
+                    new BankGatewayLogHistory(
+                        identityUser, dateTime, globalUniqueIdGenerator, serializer, transaction.Id, 
+                        BankGatewayType.ZarinPal, BankGatewayStatus.AcceptRequest, gatewayResponse.secretKey, 
+                        string.Empty
+                    )
+                );
                 
                 gatewayUrl = gatewayResponse.url;
             }
+
+            await bankGatewayLogHistoryCommandRepository.AddRangeAsync(logHistories, cancellationToken);
         }
+        else
+            targetAccount.DecreaseBalance(dateTime, identityUser, serializer, command.DecreasedAmount.Value);
         
         await transactionCommandRepository.AddAsync(transaction, cancellationToken);
         await accountCommandRepository.ChangeAsync(targetAccount, cancellationToken);

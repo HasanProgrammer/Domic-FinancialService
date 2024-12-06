@@ -19,6 +19,9 @@
   <!--CorePackage | Infrastructure-->
 
   <!--CoreService | RPC-->
+  <ItemGroup>
+    
+  </ItemGroup>
   <!--CoreService | RPC-->
 
 </Project>

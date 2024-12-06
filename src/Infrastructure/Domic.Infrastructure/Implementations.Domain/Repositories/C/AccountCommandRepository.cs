@@ -7,6 +7,9 @@ namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
 public class AccountCommandRepository(SQLContext context) : IAccountCommandRepository
 {
+    public Task<Account> FindByIdAsync(object id, CancellationToken cancellationToken)
+        => context.Accounts.FirstOrDefaultAsync(account => account.Id == id as string, cancellationToken);
+
     public Task<Account> FindByUserIdAsync(string userId, CancellationToken cancellationToken) 
         => context.Accounts.FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
     

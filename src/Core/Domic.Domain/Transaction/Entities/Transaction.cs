@@ -27,6 +27,8 @@ public class Transaction : Entity<string>
     //Relations
     
     public Account.Entities.Account Account { get; set; }
+    
+    public ICollection<BankGatewayLogHistory> LogHistories { get; set; }
 
     /*---------------------------------------------------------------*/
 
