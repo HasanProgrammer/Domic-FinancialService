@@ -22,6 +22,7 @@ public partial class SQLContext
     public DbSet<Event> Events { get; set; }
     public DbSet<ConsumerEvent> ConsumerEvents { get; set; }
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<Request> Requests { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<BankGatewayLogHistory> LogHistories { get; set; }
 }
@@ -36,6 +37,7 @@ public partial class SQLContext
         builder.ApplyConfiguration(new EventConfig());
         builder.ApplyConfiguration(new ConsumerEventConfig());
         builder.ApplyConfiguration(new AccountConfig());
+        builder.ApplyConfiguration(new RequestConfig());
         builder.ApplyConfiguration(new TransactionConfig());
         builder.ApplyConfiguration(new BankGatewayLogHistoryConfig());
     }

@@ -6,6 +6,7 @@ using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
 using Domic.Domain.Account.Events;
 using Domic.Domain.Commons.ValueObjects;
+using Domic.Domain.Transaction.Entities;
 
 namespace Domic.Domain.Account.Entities;
 
@@ -20,6 +21,8 @@ public class Account : Entity<string>
     /*---------------------------------------------------------------*/
     
     //Relations
+    
+    public ICollection<Request> Requests { get; set; }
     
     public ICollection<Transaction.Entities.Transaction> Transactions { get; set; }
 

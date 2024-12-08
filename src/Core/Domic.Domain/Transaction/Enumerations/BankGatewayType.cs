@@ -1,6 +1,6 @@
 ﻿namespace Domic.Domain.Transaction.Enumerations;
 
-public enum BankGatewayType
+public enum BankGatewayType : byte
 {
     ZarinPal
 }
