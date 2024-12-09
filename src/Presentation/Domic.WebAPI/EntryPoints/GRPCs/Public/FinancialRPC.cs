@@ -2,7 +2,10 @@
 using Domic.Core.Financial.Grpc;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Transaction.Enumerations;
+using Domic.UseCase.TransactionUseCase.Commands.ChangeAmountTransactionRequest;
+using Domic.UseCase.TransactionUseCase.Commands.ChangeStatusTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.Create;
+using Domic.UseCase.TransactionUseCase.Commands.CreateTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.PaymentVerification;
 using Grpc.Core;
 using String = Domic.Core.Financial.Grpc.String;
@@ -42,10 +45,69 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
 
         return new() {
             Code = configuration.GetSuccessStatusCode(),
-            Message = configuration.GetSuccessCreateMessage(),
+            Message = configuration.GetSuccessUpdateMessage(),
             Body = new PaymentVerificationResponseBody {
                 Status = result.Status , TransactionNumber = new String { Value = result.TransactionNumber }
             }
+        };
+    }
+
+    public override async Task<CreateTransactionRequestResponse> CreateTransactionRequest(
+        CreateTransactionRequestObject request, ServerCallContext context
+    )
+    {
+        var command = new CreateTransactionRequestCommand {
+            AccountId = request.AccountId.Value,
+            Amount = request.Amount.Value,
+            Status = (TransactionStatus)request.Status.Value,
+            BankTransferReceiptImage = request.BankTransferReceiptImage.Value,
+            RejectReason = request.RejectReason.Value
+        };
+
+        var result = await mediator.DispatchAsync(command, context.CancellationToken);
+
+        return new() {
+            Code = configuration.GetSuccessStatusCode(),
+            Message = configuration.GetSuccessCreateMessage(),
+            Body = new CreateTransactionRequestResponseBody { Result = result }
+        };
+    }
+
+    public override async Task<ChangeStatusTransactionRequestResponse> ChangeStatusTransactionRequest(
+        ChangeStatusTransactionRequestObject request, ServerCallContext context
+    )
+    {
+        var command = new ChangeStatusTransactionRequestCommand {
+            Id = request.Id.Value,
+            Status = (TransactionStatus)request.Status.Value,
+            RejectReason = request.RejectReason.Value,
+            BankTransferReceiptImage = request.BankTransferReceiptImage.Value
+        };
+        
+        var result = await mediator.DispatchAsync(command, context.CancellationToken);
+        
+        return new() {
+            Code = configuration.GetSuccessStatusCode(),
+            Message = configuration.GetSuccessUpdateMessage(),
+            Body = new ChangeStatusTransactionRequestResponseBody { Result = result }
+        };
+    }
+
+    public override async Task<ChangeAmountTransactionRequestResponse> ChangeAmountTransactionRequest(
+        ChangeAmountTransactionRequestObject request, ServerCallContext context
+    )
+    {
+        var command = new ChangeAmountTransactionRequestCommand {
+            Id = request.Id.Value,
+            Amount = request.Amount.Value
+        };
+        
+        var result = await mediator.DispatchAsync(command, context.CancellationToken);
+        
+        return new() {
+            Code = configuration.GetSuccessStatusCode(),
+            Message = configuration.GetSuccessUpdateMessage(),
+            Body = new ChangeAmountTransactionRequestResponseBody { Result = result }
         };
     }
 }
