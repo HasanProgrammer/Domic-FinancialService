@@ -11,6 +11,4 @@ public class TransactionRequestCreated : CreateDomainEvent<string>
     public required string AccountId { get; init; }
     public required long? Amount { get; init; }
     public required TransactionStatus Status { get; init; }
-    public required string RejectReason { get; init; }
-    public required string BankTransferReceiptImage { get; init; }
 }

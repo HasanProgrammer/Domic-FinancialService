@@ -35,12 +35,8 @@ public class Request : Entity<string>
     /// <param name="serializer"></param>
     /// <param name="accountId"></param>
     /// <param name="amount"></param>
-    /// <param name="status"></param>
-    /// <param name="rejectReason"></param>
-    /// <param name="bankTransferReceiptImage"></param>
     public Request(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IIdentityUser identityUser, IDateTime dateTime,
-        ISerializer serializer, string accountId, long? amount, TransactionStatus status, string rejectReason,
-        string bankTransferReceiptImage
+        ISerializer serializer, string accountId, long? amount
     )
     {
         var uniqueId = globalUniqueIdGenerator.GetRandom(6);
@@ -50,8 +46,7 @@ public class Request : Entity<string>
         Id = uniqueId;
         AccountId = accountId;
         Amount = new Amount(amount);
-        Status = status;
-        RejectReason = rejectReason;
+        Status = TransactionStatus.Requested;
         
         //audit
         CreatedBy = identityUser.GetIdentity();
@@ -63,9 +58,7 @@ public class Request : Entity<string>
                 Id = Id,
                 AccountId = accountId,
                 Amount = amount,
-                Status = status,
-                RejectReason = rejectReason,
-                BankTransferReceiptImage = bankTransferReceiptImage,
+                Status = Status,
                 CreatedBy = CreatedBy,
                 CreatedRole = CreatedRole,
                 CreatedAt_EnglishDate = nowDateTime,

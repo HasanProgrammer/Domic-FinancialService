@@ -8,6 +8,7 @@ using Domic.UseCase.TransactionUseCase.Commands.Create;
 using Domic.UseCase.TransactionUseCase.Commands.CreateTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.PaymentVerification;
 using Grpc.Core;
+
 using String = Domic.Core.Financial.Grpc.String;
 
 namespace Domic.WebAPI.EntryPoints.GRPCs.Public;
@@ -58,10 +59,7 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
     {
         var command = new CreateTransactionRequestCommand {
             AccountId = request.AccountId.Value,
-            Amount = request.Amount.Value,
-            Status = (TransactionStatus)request.Status.Value,
-            BankTransferReceiptImage = request.BankTransferReceiptImage.Value,
-            RejectReason = request.RejectReason.Value
+            Amount = request.Amount.Value
         };
 
         var result = await mediator.DispatchAsync(command, context.CancellationToken);

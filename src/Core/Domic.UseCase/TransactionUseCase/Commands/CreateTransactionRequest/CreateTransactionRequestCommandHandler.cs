@@ -19,7 +19,7 @@ public class CreateTransactionRequestCommandHandler(
     public async Task<bool> HandleAsync(CreateTransactionRequestCommand command, CancellationToken cancellationToken)
     {
         var newTransactionRequest = new Request(globalUniqueIdGenerator, identityUser, dateTime, serializer, 
-            command.AccountId, command.Amount, command.Status, command.RejectReason, command.BankTransferReceiptImage
+            command.AccountId, command.Amount
         );
 
         await transactionRequestCommandRepository.AddAsync(newTransactionRequest, cancellationToken);
