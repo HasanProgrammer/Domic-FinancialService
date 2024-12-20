@@ -16,6 +16,7 @@ public class CreateTransactionRequestCommandHandler(
         => Task.CompletedTask;
 
     [WithTransaction]
+    [WithValidation]
     public async Task<bool> HandleAsync(CreateTransactionRequestCommand command, CancellationToken cancellationToken)
     {
         var newTransactionRequest = new Request(globalUniqueIdGenerator, identityUser, dateTime, serializer, 

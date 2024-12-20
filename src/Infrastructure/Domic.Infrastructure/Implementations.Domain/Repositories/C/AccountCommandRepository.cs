@@ -18,6 +18,9 @@ public class AccountCommandRepository(SQLContext context) : IAccountCommandRepos
                   .Include(account => account.Transactions)
                   .FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
 
+    public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken)
+        => context.Accounts.AnyAsync(acc => acc.Id == id, cancellationToken);
+
     public Task ChangeAsync(Account entity, CancellationToken cancellationToken)
     {
         context.Accounts.Update(entity);

@@ -23,4 +23,6 @@ public interface IAccountCommandRepository : ICommandRepository<Entities.Account
     /// <exception cref="NotImplementedException"></exception>
     public Task<Entities.Account> FindByUserIdEagerLoadingAsync(string userId, CancellationToken cancellationToken)
         => throw new NotImplementedException();
+
+    public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken);
 }
