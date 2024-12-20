@@ -9,7 +9,7 @@ public class CreateTransactionRequestCommandValidator(IAccountCommandRepository 
 {
     public async Task<object> ValidateAsync(CreateTransactionRequestCommand input, CancellationToken cancellationToken)
     {
-        if (await accountCommandRepository.IsExistByIdAsync(input.AccountId, cancellationToken))
+        if (!await accountCommandRepository.IsExistByIdAsync(input.AccountId, cancellationToken))
             throw new UseCaseException(
                 string.Format("حساب کیف پولی با شناسه {0} موجود نمی باشد!", input.AccountId)
             );
