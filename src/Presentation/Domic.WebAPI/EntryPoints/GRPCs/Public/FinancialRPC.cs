@@ -2,6 +2,7 @@
 using Domic.Core.Financial.Grpc;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Transaction.Enumerations;
+using Domic.UseCase.AccountUseCase.Commands.DecreaseBalance;
 using Domic.UseCase.TransactionUseCase.Commands.ChangeAmountTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.ChangeStatusTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.Create;
@@ -27,7 +28,7 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
         var result = await mediator.DispatchAsync(command, context.CancellationToken);
 
         return new() {
-            Code = configuration.GetSuccessStatusCode(),
+            Code = configuration.GetSuccessCreateStatusCode(),
             Message = configuration.GetSuccessCreateMessage(),
             Body = new CreateResponseBody { BankGatewayUrl = result }
         };
@@ -65,7 +66,7 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
         var result = await mediator.DispatchAsync(command, context.CancellationToken);
 
         return new() {
-            Code = configuration.GetSuccessStatusCode(),
+            Code = configuration.GetSuccessCreateStatusCode(),
             Message = configuration.GetSuccessCreateMessage(),
             Body = new CreateTransactionRequestResponseBody { Result = result }
         };
@@ -106,6 +107,24 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
             Code = configuration.GetSuccessStatusCode(),
             Message = configuration.GetSuccessUpdateMessage(),
             Body = new ChangeAmountTransactionRequestResponseBody { Result = result }
+        };
+    }
+
+    public override async Task<DecreaseBalanceOfWalletResponse> DecreaseBalanceOfWallet(
+        DecreaseBalanceOfWalletRequest request, ServerCallContext context
+    )
+    {
+        var command = new DecreaseBalanceCommand {
+            Value = request.Value.Value,
+            AccountId = request.AccountId.Value
+        };
+
+        var result = await mediator.DispatchAsync(command, context.CancellationToken);
+        
+        return new() {
+            Code = configuration.GetSuccessStatusCode(),
+            Message = configuration.GetSuccessUpdateMessage(),
+            Body = new DecreaseBalanceOfWalletResponseBody { Result = result }
         };
     }
 }

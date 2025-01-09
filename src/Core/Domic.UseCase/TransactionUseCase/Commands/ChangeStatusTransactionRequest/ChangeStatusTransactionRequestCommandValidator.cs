@@ -10,7 +10,7 @@ public class ChangeStatusTransactionRequestCommandValidator(
 {
     public async Task<object> ValidateAsync(ChangeStatusTransactionRequestCommand input, CancellationToken cancellationToken)
     {
-        var targetRequest = await transactionRequestCommandRepository.FindByIdAsync(input.Id, cancellationToken);
+        var targetRequest = await transactionRequestCommandRepository.FindByIdEagerLoadingAsync(input.Id, cancellationToken);
 
         if (targetRequest is null)
             throw new UseCaseException(string.Format("درخواست واریز وجهی با شناسه {0} موجود نمی باشد!", input.Id));

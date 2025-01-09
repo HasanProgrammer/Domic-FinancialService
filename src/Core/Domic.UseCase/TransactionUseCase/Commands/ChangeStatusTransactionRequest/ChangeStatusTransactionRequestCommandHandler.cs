@@ -3,14 +3,17 @@
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
+using Domic.Domain.Account.Contracts.Interfaces;
 using Domic.Domain.Transaction.Contracts.Interfaces;
 using Domic.Domain.Transaction.Entities;
+using Domic.Domain.Transaction.Enumerations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.TransactionUseCase.Commands.ChangeStatusTransactionRequest;
 
 public class ChangeStatusTransactionRequestCommandHandler(
-    ITransactionRequestCommandRepository transactionRequestCommandRepository, 
+    ITransactionRequestCommandRepository transactionRequestCommandRepository, IAccountCommandRepository accountCommandRepository,
+    ITransactionCommandRepository transactionCommandRepository, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
     [FromKeyedServices("Http2")] IIdentityUser identityUser, IDateTime dateTime, ISerializer serializer
 ) : ICommandHandler<ChangeStatusTransactionRequestCommand, bool>
 {
@@ -30,6 +33,19 @@ public class ChangeStatusTransactionRequestCommandHandler(
         );
 
         await transactionRequestCommandRepository.ChangeAsync(targetRequest, cancellationToken);
+
+        if (command.Status == TransactionStatus.Accepted)
+        {
+            targetRequest.Account.DecreaseBalance(dateTime, identityUser, serializer, targetRequest.Amount.Value.Value);
+
+            await accountCommandRepository.ChangeAsync(targetRequest.Account, cancellationToken);
+
+            var newTransaction = new Transaction(identityUser, serializer, globalUniqueIdGenerator, dateTime,
+                targetRequest.AccountId, targetRequest.Amount.Value.Value, null, TransactionType.DecreasedAmount
+            );
+
+            await transactionCommandRepository.AddAsync(newTransaction, cancellationToken);
+        }
 
         return true;
     }

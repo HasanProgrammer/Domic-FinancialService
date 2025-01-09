@@ -20,7 +20,7 @@
 
   <!--CoreService | RPC-->
   <ItemGroup>
-    <PackageReference Include="Domic.Grpc.Financial" Version="1.0.6" />
+    <PackageReference Include="Domic.Grpc.Financial" Version="1.0.8" />
   </ItemGroup>
   <!--CoreService | RPC-->
 

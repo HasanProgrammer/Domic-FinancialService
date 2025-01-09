@@ -11,16 +11,6 @@ public interface IAccountCommandRepository : ICommandRepository<Entities.Account
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<Entities.Account> FindByUserIdAsync(string userId, CancellationToken cancellationToken)
-        => throw new NotImplementedException();
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     public Task<Entities.Account> FindByUserIdEagerLoadingAsync(string userId, CancellationToken cancellationToken)
         => throw new NotImplementedException();
 

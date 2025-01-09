@@ -21,6 +21,8 @@ public class TransactionRequestCommandRepository(SQLContext context) : ITransact
         return Task.CompletedTask;
     }
 
-    public Task<Request> FindByIdAsync(object id, CancellationToken cancellationToken) 
-        => context.Requests.AsNoTracking().FirstOrDefaultAsync(request => request.Id == id as string, cancellationToken);
+    public Task<Request> FindByIdEagerLoadingAsync(object id, CancellationToken cancellationToken) 
+        => context.Requests.AsNoTracking()
+                           .Include(r => r.Account)
+                           .FirstOrDefaultAsync(request => request.Id == id as string, cancellationToken);
 }
