@@ -17,31 +17,31 @@ services:
       - ~\.aspnet\https\:/https/
     environment:
       - Elastic-Host=http://localhost:9200
-      - Elastic-Username=
-      - Elastic-Password=
-      - E-RabbitMQ-Host=host.docker.internal
+      - Elastic-Username=domic
+      - Elastic-Password=Domic123!@#
+      - Elastic-Index=financial
+      - E-RabbitMQ-Host=domic.rabbit.mq
       - E-RabbitMQ-Port=5672
-      - E-RabbitMQ-Username=guest
-      - E-RabbitMQ-Password=guest
+      - E-RabbitMQ-Username=domic
+      - E-RabbitMQ-Password=Domic123!@#
       - I-RabbitMQ-Host=
       - I-RabbitMQ-Port=
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
-      - E-RedisConnectionString=domic.financial.redis:6379
+      - E-RedisConnectionString=domic.redis:6379
       - I-RedisConnectionString=domic.financial.redis:6379
       - MongoConnectionString=
-      - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=financialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
-      - Q-SqlServerConnectionString=Server=domic.financial.query.sql.server,1433;Database=financialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
+      - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
+      - Q-SqlServerConnectionString=Server=
       - Host=domic.financial.api
-      - Port=80
+      - Port=443
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=Dotris313@313%%
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Karami.WebAPI.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Domic123!@#
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Domic.WebAPI.pfx
     
     depends_on:
       - domic.financial.command.sql.server
-      - domic.financial.query.sql.server
       - domic.financial.redis
       - domic.financial.rabbit
   
@@ -51,34 +51,10 @@ services:
     image: 'mcr.microsoft.com/mssql/server'
     container_name: "financial_command_sql_server"
     ports:
-      - 1433:1433
+      - 1833:1433
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Hasan313@@313!!
-  
-  domic.financial.query.sql.server:
-    networks:
-      - domic
-    image: 'mcr.microsoft.com/mssql/server'
-    container_name: "financial_query_sql_server"
-    ports:
-      - 1400:1433
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Hasan313@@313!!
-
-  domic.financial.rabbit:
-    networks:
-      - domic
-    image: 'rabbitmq:3-management'
-    container_name: 'financial_rabbit'
-    restart: on-failure
-    ports:
-      - '15660:15672'
-      - '5660:5672'
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
 
   domic.financial.redis:
     networks:
@@ -87,7 +63,7 @@ services:
     container_name: 'financial_redis'
     command: 'redis-server'
     ports:
-      - 6380:6379
+      - 9080:6379
 
 volumes:
   log:
