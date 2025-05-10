@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
     restart: on-failure
     ports:
-      - 80:443
+      - "1369-1389:443"
     volumes:
       - log:/app/CoreLogs
       - ~\.aspnet\https\:/https/
