@@ -34,7 +34,7 @@
         "E-RedisConnectionString": "127.0.0.1:6379",
         "I-RedisConnectionString": "127.0.0.1:6379",
         "MongoConnectionString": "mongodb://domic:Domic123!@#@127.0.0.1:27017",
-        "C-SqlServerConnectionString": "Server=127.0.0.1,1633;Database=C-FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;",
+        "C-SqlServerConnectionString": "Server=127.0.0.1,1633;Database=C-FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=true",
         "Q-SqlServerConnectionString": "",
         "ZarinPalUrl" : "https://payment.zarinpal.com/pg/StartPay",
         "ZarinPalSandBoxUrl" : "https://sandbox.zarinpal.com/pg/StartPay",
