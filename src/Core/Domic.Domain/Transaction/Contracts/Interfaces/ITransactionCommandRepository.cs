@@ -28,7 +28,7 @@ public interface ITransactionCommandRepository : ICommandRepository<Entities.Tra
     /// <param name="conditions"></param>
     /// <typeparam name="TViewModel"></typeparam>
     /// <returns></returns>
-    public new Task<List<TViewModel>> FindAllWithPaginateAndOrderingByProjectionConditionallyAsync<TViewModel>(
+    public Task<List<TViewModel>> FindAllWithPaginateAndOrderingByProjectionConditionallyAsync<TViewModel>(
         int countPerPage,
         int pageNumber,
         Order order,

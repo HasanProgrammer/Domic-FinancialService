@@ -133,6 +133,19 @@ public class Account : Entity<string>
         );
     }
     
+    public void Change(IDateTime dateTime, string owner, string updatedBy, string updatedRole)
+    {
+        var nowDateTime = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        Owner = owner;
+        
+        //audit
+        UpdatedBy = updatedBy;
+        UpdatedRole = updatedRole;
+        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+    }
+    
     public void IncreaseBalance(IDateTime dateTime, IIdentityUser identityUser, ISerializer serializer, long value)
     {
         var nowDateTime = DateTime.Now;

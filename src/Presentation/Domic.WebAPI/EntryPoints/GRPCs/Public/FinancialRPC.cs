@@ -1,6 +1,8 @@
 ﻿using Domic.Core.Common.ClassExtensions;
 using Domic.Core.Financial.Grpc;
+using Domic.Core.Infrastructure.Extensions;
 using Domic.Core.UseCase.Contracts.Interfaces;
+using Domic.Domain.Commons.Enumerations;
 using Domic.Domain.Transaction.Enumerations;
 using Domic.UseCase.AccountUseCase.Commands.DecreaseBalance;
 using Domic.UseCase.AccountUseCase.Queries.CurrentBalence;
@@ -9,6 +11,7 @@ using Domic.UseCase.TransactionUseCase.Commands.ChangeStatusTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.Create;
 using Domic.UseCase.TransactionUseCase.Commands.CreateTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.PaymentVerification;
+using Domic.UseCase.TransactionUseCase.Queries.ReadAllTransactionPaginated;
 using Grpc.Core;
 
 using String = Domic.Core.Financial.Grpc.String;
@@ -26,6 +29,30 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
             Message = configuration.GetSuccessFetchDataMessage(),
             Body = new CurrentBalenceResponseBody { Amount = result }
         };
+    }
+
+    public override async Task<ReadAllTransactionResponse> ReadAllTransactionPaginated(ReadAllTransactionRequest request, ServerCallContext context)
+    {
+        var query = new ReadAllTransactionPaginatedQuery {
+            PageNumber = request.PageNumber.Value,
+            CountPerPage = request.CountPerPage.Value,
+            UserId = request.UserId?.Value,
+            Sort = (Sort)request.Sort.Value,
+            SearchText = request.SearchText?.Value
+        };
+        
+        var result = await mediator.DispatchAsync(query, context.CancellationToken);
+
+        return new() {
+            Code = configuration.GetSuccessStatusCode(),
+            Message = configuration.GetSuccessFetchDataMessage(),
+            Body = new ReadAllTransactionResponseBody { Transactions = result.Serialize() }
+        };
+    }
+
+    public override Task<ReadAllTransactionRequestPaginatedResponse> ReadAllTransactionRequestPaginated(ReadAllTransactionRequestPaginatedObject request, ServerCallContext context)
+    {
+        return base.ReadAllTransactionRequestPaginated(request, context);
     }
 
     public override async Task<CreateResponse> Create(CreateRequest request, ServerCallContext context)
