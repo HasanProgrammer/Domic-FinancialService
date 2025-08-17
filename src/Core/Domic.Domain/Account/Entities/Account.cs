@@ -13,6 +13,7 @@ namespace Domic.Domain.Account.Entities;
 public class Account : Entity<string>
 {
     public string UserId { get; private set; }
+    public string Owner  { get; private set; }
     
     //Value Objects
     
@@ -37,11 +38,12 @@ public class Account : Entity<string>
     /// <param name="globalUniqueIdGenerator"></param>
     /// <param name="dateTime"></param>
     /// <param name="userId"></param>
+    /// <param name="owner"></param>
     /// <param name="createdBy"></param>
     /// <param name="createdRole"></param>
     /// <param name="balance"></param>
     public Account(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, string userId,
-        string createdBy, string createdRole, long balance
+        string owner, string createdBy, string createdRole, long balance
     )
     {
         var uniqueId = globalUniqueIdGenerator.GetRandom(6);
@@ -50,6 +52,7 @@ public class Account : Entity<string>
 
         Id = uniqueId;
         UserId = userId;
+        Owner = owner;
         Balance = new Amount(balance);
         
         //audit

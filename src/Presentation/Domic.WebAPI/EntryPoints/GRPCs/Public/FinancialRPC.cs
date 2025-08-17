@@ -3,6 +3,7 @@ using Domic.Core.Financial.Grpc;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Transaction.Enumerations;
 using Domic.UseCase.AccountUseCase.Commands.DecreaseBalance;
+using Domic.UseCase.AccountUseCase.Queries.CurrentBalence;
 using Domic.UseCase.TransactionUseCase.Commands.ChangeAmountTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.ChangeStatusTransactionRequest;
 using Domic.UseCase.TransactionUseCase.Commands.Create;
@@ -16,6 +17,17 @@ namespace Domic.WebAPI.EntryPoints.GRPCs.Public;
 
 public class FinancialRPC(IMediator mediator, IConfiguration configuration) : FinancialService.FinancialServiceBase
 {
+    public override async Task<CurrentBalenceResponse> CurrentBalence(CurrentBalenceRequest request, ServerCallContext context)
+    {
+        var result = await mediator.DispatchAsync(new CurrentBalenceQuery(), context.CancellationToken);
+
+        return new() {
+            Code = configuration.GetSuccessStatusCode(),
+            Message = configuration.GetSuccessFetchDataMessage(),
+            Body = new CurrentBalenceResponseBody { Amount = result }
+        };
+    }
+
     public override async Task<CreateResponse> Create(CreateRequest request, ServerCallContext context)
     {
         var command = new CreateCommand {

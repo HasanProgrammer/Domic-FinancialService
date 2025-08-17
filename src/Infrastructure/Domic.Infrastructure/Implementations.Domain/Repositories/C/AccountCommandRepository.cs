@@ -7,6 +7,12 @@ namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
 public class AccountCommandRepository(SQLContext context) : IAccountCommandRepository
 {
+    public Task<long> CurrentBalenceAsync(string userId, CancellationToken cancellationToken) 
+        => context.Accounts.AsNoTracking()
+                           .Where(acc => acc.UserId == userId)
+                           .Select(acc => acc.Balance.Value.Value)
+                           .FirstOrDefaultAsync(cancellationToken);
+
     public Task<Account> FindByIdAsync(object id, CancellationToken cancellationToken)
         => context.Accounts.FirstOrDefaultAsync(account => account.Id == id as string, cancellationToken);
 

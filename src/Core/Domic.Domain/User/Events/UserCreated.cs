@@ -4,4 +4,8 @@ using Domic.Core.Domain.Contracts.Abstracts;
 namespace Domic.Domain.User.Events;
 
 [EventConfig(Queue = "Financial_User_Queue")]
-public class UserCreated : CreateDomainEvent<string>;
+public class UserCreated : CreateDomainEvent<string>
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+}

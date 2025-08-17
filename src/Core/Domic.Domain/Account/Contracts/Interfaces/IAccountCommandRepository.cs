@@ -14,5 +14,19 @@ public interface IAccountCommandRepository : ICommandRepository<Entities.Account
     public Task<Entities.Account> FindByUserIdEagerLoadingAsync(string userId, CancellationToken cancellationToken)
         => throw new NotImplementedException();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<long> CurrentBalenceAsync(string userId, CancellationToken cancellationToken);
 }

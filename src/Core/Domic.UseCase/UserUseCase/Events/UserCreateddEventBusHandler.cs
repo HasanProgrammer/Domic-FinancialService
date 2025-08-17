@@ -17,8 +17,8 @@ public class UserCreatedEventBusHandler(IAccountCommandRepository accountCommand
     [TransactionConfig(Type = TransactionType.Command)]
     public Task HandleAsync(UserCreated @event, CancellationToken cancellationToken)
     {
-        var newAccount = new Account(globalUniqueIdGenerator, dateTime, @event.Id, @event.CreatedBy,
-            @event.CreatedRole, 0
+        var newAccount = new Account(globalUniqueIdGenerator, dateTime, $"{@event.FirstName} {@event.LastName}",
+            @event.Id, @event.CreatedBy, @event.CreatedRole, 0
         );
         
         return accountCommandRepository.AddAsync(newAccount, cancellationToken);
