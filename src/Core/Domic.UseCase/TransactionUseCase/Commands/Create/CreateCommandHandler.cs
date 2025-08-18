@@ -69,7 +69,9 @@ public class CreateCommandHandler(
             await bankGatewayLogHistoryCommandRepository.AddRangeAsync(logHistories, cancellationToken);
         }
         else
-            targetAccount.DecreaseBalance(dateTime, identityUser, serializer, command.DecreasedAmount.Value);
+            targetAccount.DecreaseBalance(dateTime, identityUser, serializer, command.DecreasedAmount.Value,
+                command.Items
+            );
         
         await transactionCommandRepository.AddAsync(transaction, cancellationToken);
         await accountCommandRepository.ChangeAsync(targetAccount, cancellationToken);

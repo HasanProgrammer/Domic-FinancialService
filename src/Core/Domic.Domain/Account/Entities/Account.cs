@@ -193,4 +193,31 @@ public class Account : Entity<string>
             }
         );
     }
+    
+    public void DecreaseBalance(IDateTime dateTime, IIdentityUser identityUser, ISerializer serializer, long value,
+        List<string> items
+    )
+    {
+        var nowDateTime = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+        
+        Balance = new Amount(Balance.Value - value);
+        
+        //audit
+        UpdatedBy = identityUser.GetIdentity();
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
+        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new AccountDeCharged {
+                Id = Id,
+                Items = items,
+                Value = value,
+                UpdatedBy = UpdatedBy,
+                UpdatedRole = UpdatedRole,
+                UpdatedAt_EnglishDate = nowDateTime,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        );
+    }
 }
