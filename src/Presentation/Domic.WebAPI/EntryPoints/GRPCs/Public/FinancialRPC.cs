@@ -58,6 +58,7 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
     public override async Task<CreateResponse> Create(CreateRequest request, ServerCallContext context)
     {
         var command = new CreateCommand {
+            Items = request.Items.ToList(),
             AccountId = request.AccountId.Value,
             IncreasedAmount = request.IncreasedAmount.Value,
             DecreasedAmount = request.DecreasedAmount.Value,
