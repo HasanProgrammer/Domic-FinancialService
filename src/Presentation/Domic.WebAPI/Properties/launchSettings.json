@@ -38,7 +38,7 @@
         "Q-SqlServerConnectionString": "",
         "ZarinPalUrl" : "https://payment.zarinpal.com/pg/StartPay",
         "ZarinPalSandBoxUrl" : "https://sandbox.zarinpal.com/pg/StartPay",
-        "ZarinPalCallbackUrl" : "httpcls://localhost:6600/profile/financial/verification",
+        "ZarinPalCallbackUrl" : "http://localhost:6600/profile/financial/verification",
         "ZarinPalMerchentId" : "78879e06-e316-49a1-98a6-37306683ad7a",
         "Host": "localhost",
         "Port": "11001",
