@@ -3,7 +3,6 @@
 public class ZarinPalResponseDto
 {
     public RequestData data { get; set; }
-    public List<string> errors { get; set; }
 }
 
 public class RequestData

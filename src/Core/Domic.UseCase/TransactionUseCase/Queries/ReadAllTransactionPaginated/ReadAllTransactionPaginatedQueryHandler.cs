@@ -26,19 +26,21 @@ public class ReadAllTransactionPaginatedQueryHandler(ITransactionCommandReposito
         var countOfData = await transactionCommandRepository.CountRowsConditionallyAsync(predictCondition, cancellationToken);
 
         var collection = await transactionCommandRepository.FindAllWithPaginateAndOrderingByProjectionConditionallyAsync(
-            query.PageNumber.Value,
             query.CountPerPage.Value,
+            query.PageNumber.Value,
             Order.Date,
             query.Sort == Sort.Oldest,
             cancellationToken,
             transaction => new TransactionDto {
+                Id = transaction.Id,
                 Owner = transaction.Account.Owner,
-                Type = transaction.TransactionType == TransactionType.IncreasedAmount ? "شارژ" : "برداشت",
+                Type = transaction.TransactionType == TransactionType.IncreasedAmount ? "واریز" : "برداشت",
                 Amount = transaction.TransactionType == TransactionType.DecreasedAmount 
                     ? transaction.DecreasedAmount.Value.Value
                     : transaction.IncreasedAmount.Value.Value,
                 EnCreatedAt = transaction.CreatedAt.EnglishDate.Value,
-                FrCreatedAt = transaction.CreatedAt.PersianDate
+                FrCreatedAt = transaction.CreatedAt.PersianDate,
+                IsActive = transaction.IsActive == IsActive.Active
             },
             predictCondition
         );

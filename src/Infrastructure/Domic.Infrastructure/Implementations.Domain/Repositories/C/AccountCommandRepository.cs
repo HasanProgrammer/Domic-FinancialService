@@ -14,10 +14,10 @@ public class AccountCommandRepository(SQLContext context) : IAccountCommandRepos
                            .FirstOrDefaultAsync(cancellationToken);
 
     public Task<Account> FindByIdAsync(object id, CancellationToken cancellationToken)
-        => context.Accounts.FirstOrDefaultAsync(account => account.Id == id as string, cancellationToken);
+        => context.Accounts.AsNoTracking().FirstOrDefaultAsync(account => account.Id == id as string, cancellationToken);
 
     public Task<Account> FindByUserIdAsync(string userId, CancellationToken cancellationToken) 
-        => context.Accounts.FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
+        => context.Accounts.AsNoTracking().FirstOrDefaultAsync(account => account.UserId == userId, cancellationToken);
     
     public Task<Account> FindByUserIdEagerLoadingAsync(string userId, CancellationToken cancellationToken) 
         => context.Accounts

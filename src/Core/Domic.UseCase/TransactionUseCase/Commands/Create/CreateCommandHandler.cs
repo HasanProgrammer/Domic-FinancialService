@@ -35,7 +35,7 @@ public class CreateCommandHandler(
         string gatewayUrl = string.Empty;
         
         var transaction = new Transaction(identityUser, serializer, globalUniqueIdGenerator, dateTime,
-            command.AccountId, command.IncreasedAmount, command.DecreasedAmount, command.TransactionType
+            targetAccount.Id, command.IncreasedAmount, command.DecreasedAmount, command.TransactionType
         );
 
         if (command.TransactionType == TransactionType.IncreasedAmount)
