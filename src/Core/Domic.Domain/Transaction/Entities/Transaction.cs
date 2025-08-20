@@ -57,6 +57,7 @@ public class Transaction : Entity<string>
 
         Id = uniqueId;
         AccountId = accountId;
+        TransactionType = transactionType;
         IsActive = IsActive.Active;
         
         if(increasedAmount is not null)

@@ -59,9 +59,9 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
     {
         var command = new CreateCommand {
             Items = request.Items.ToList(),
-            AccountId = request.AccountId.Value,
-            IncreasedAmount = request.IncreasedAmount.Value,
-            DecreasedAmount = request.DecreasedAmount.Value,
+            AccountId = request.AccountId?.Value,
+            IncreasedAmount = request.IncreasedAmount?.Value,
+            DecreasedAmount = request.DecreasedAmount?.Value,
             TransactionType = (TransactionType)request.TransactionType.Value
         };
 
