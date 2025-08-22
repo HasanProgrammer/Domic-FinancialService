@@ -8,7 +8,7 @@ using Domic.Domain.User.Events;
 namespace Domic.UseCase.UserUseCase.Events;
 
 public class UserUpdatedEventBusHandler(IAccountCommandRepository accountCommandRepository, IDateTime dateTime
-) : IConsumerEventBusHandler<UserCreated>
+) : IConsumerEventBusHandler<UserUpdated>
 {
     public Task BeforeHandleAsync(UserUpdated @event, CancellationToken cancellationToken) => Task.CompletedTask;
 
@@ -17,7 +17,7 @@ public class UserUpdatedEventBusHandler(IAccountCommandRepository accountCommand
     {
         var targetAcc = await accountCommandRepository.FindByUserIdAsync(@event.Id, cancellationToken);
         
-        targetAcc.Change(dateTime, $"{@event.FirstName} ${@event.LastName}", @event.UpdatedBy, @event.UpdatedRole);
+        targetAcc.Change(dateTime, $"{@event.FirstName} {@event.LastName}", @event.UpdatedBy, @event.UpdatedRole);
         
         await accountCommandRepository.ChangeAsync(targetAcc, cancellationToken);
     }
