@@ -34,7 +34,7 @@ public class PaymentVerificationCommandHandler(
         if (targetTransaction is not null && targetTransaction.IsActive == IsActive.InActive)
         {
             var verifyDto = new ZarinPalVerificationDto {
-                Amount = command.Amount,
+                Amount = command.Amount * 10,
                 Authority = command.BankGatewaySecretKey
             };
 
@@ -44,7 +44,7 @@ public class PaymentVerificationCommandHandler(
             {
                 targetTransaction.Active(dateTime, identityUser, serializer, true);
             
-                targetTransaction.Account.IncreaseBalance(dateTime, identityUser, serializer, command.Amount);
+                targetTransaction.Account.IncreaseBalance(dateTime, identityUser, serializer, command.Amount * 10);
 
                 await accountCommandRepository.ChangeAsync(targetTransaction.Account, cancellationToken);
                 await transactionCommandRepository.ChangeAsync(targetTransaction, cancellationToken);

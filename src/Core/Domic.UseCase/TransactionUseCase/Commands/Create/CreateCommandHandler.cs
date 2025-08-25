@@ -35,7 +35,7 @@ public class CreateCommandHandler(
         string gatewayUrl = string.Empty;
         
         var transaction = new Transaction(identityUser, serializer, globalUniqueIdGenerator, dateTime,
-            targetAccount.Id, command.IncreasedAmount, command.DecreasedAmount, command.TransactionType
+            targetAccount.Id, command.IncreasedAmount * 10, command.DecreasedAmount * 10, command.TransactionType
         );
 
         if (command.TransactionType == TransactionType.IncreasedAmount)
@@ -49,7 +49,7 @@ public class CreateCommandHandler(
                 )
             };
             
-            var requestDto = new ZarinPalRequestDto { Amount = command.IncreasedAmount.Value };
+            var requestDto = new ZarinPalRequestDto { Amount = command.IncreasedAmount.Value * 10 };
 
             var gatewayResponse = await bankGateway.RequestAsync(requestDto, cancellationToken);
 
@@ -69,7 +69,7 @@ public class CreateCommandHandler(
             await bankGatewayLogHistoryCommandRepository.AddRangeAsync(logHistories, cancellationToken);
         }
         else
-            targetAccount.DecreaseBalance(dateTime, identityUser, serializer, command.DecreasedAmount.Value,
+            targetAccount.DecreaseBalance(dateTime, identityUser, serializer, command.DecreasedAmount.Value * 10,
                 command.Items
             );
         
