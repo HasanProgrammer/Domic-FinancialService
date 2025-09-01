@@ -67,6 +67,6 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
             
         var result = await response.Content.ReadFromJsonAsync<ZarinPalVerificationResponseDto>(cancellationToken);
 
-        return ( result.data.code == 101 , result.data.ref_id.ToString() );
+        return ( result.data.code == 100 , result.data.ref_id.ToString() );
     }
 }
