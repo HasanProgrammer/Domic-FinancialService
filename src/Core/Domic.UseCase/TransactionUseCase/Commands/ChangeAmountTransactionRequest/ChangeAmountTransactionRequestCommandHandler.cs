@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.TransactionUseCase.Commands.ChangeAmountTransactionRequest;
 
-public class ChangeStatusTransactionRequestCommandHandler(
+public class ChangeAmountTransactionRequestCommandHandler(
     ITransactionRequestCommandRepository transactionRequestCommandRepository, 
     [FromKeyedServices("Http2")] IIdentityUser identityUser, IDateTime dateTime, ISerializer serializer
 ) : ICommandHandler<ChangeAmountTransactionRequestCommand, bool>
@@ -25,7 +25,7 @@ public class ChangeStatusTransactionRequestCommandHandler(
     {
         var targetRequest = _validationResult as Request;
         
-        targetRequest.ChangeAmount(identityUser, dateTime, serializer, command.Amount);
+        targetRequest.ChangeAmount(identityUser, dateTime, serializer, command.Amount * 10);
 
         await transactionRequestCommandRepository.ChangeAsync(targetRequest, cancellationToken);
 

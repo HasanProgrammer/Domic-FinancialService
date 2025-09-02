@@ -10,6 +10,6 @@ public class CurrentBalenceQueryHandler(
     [FromKeyedServices("Http2")] IIdentityUser identityUser
 ) : IQueryHandler<CurrentBalenceQuery, long>
 {
-    public Task<long> HandleAsync(CurrentBalenceQuery query, CancellationToken cancellationToken)
-        => accountCommandRepository.CurrentBalenceAsync(identityUser.GetIdentity(), cancellationToken);
+    public async Task<long> HandleAsync(CurrentBalenceQuery query, CancellationToken cancellationToken)
+        => ( await accountCommandRepository.CurrentBalenceAsync(identityUser.GetIdentity(), cancellationToken) ) / 10;
 }

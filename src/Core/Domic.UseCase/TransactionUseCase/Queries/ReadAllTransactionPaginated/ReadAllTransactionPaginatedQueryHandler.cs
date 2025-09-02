@@ -36,8 +36,8 @@ public class ReadAllTransactionPaginatedQueryHandler(ITransactionCommandReposito
                 Owner = transaction.Account.Owner,
                 Type = transaction.TransactionType == TransactionType.IncreasedAmount ? "واریز" : "برداشت",
                 Amount = transaction.TransactionType == TransactionType.DecreasedAmount 
-                    ? transaction.DecreasedAmount.Value.Value
-                    : transaction.IncreasedAmount.Value.Value,
+                    ? transaction.DecreasedAmount.Value.Value / 10
+                    : transaction.IncreasedAmount.Value.Value / 10,
                 EnCreatedAt = transaction.CreatedAt.EnglishDate.Value,
                 FrCreatedAt = transaction.CreatedAt.PersianDate,
                 IsActive = transaction.IsActive == IsActive.Active

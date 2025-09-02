@@ -28,7 +28,7 @@ public class DecreaseBalanceCommandHandler(IAccountCommandRepository accountComm
     {
         var targetAccount = _validationResult as Account;
         
-        targetAccount.DecreaseBalance(dateTime, identityUser, serializer, command.Value);
+        targetAccount.DecreaseBalance(dateTime, identityUser, serializer, command.Value * 10);
 
         await accountCommandRepository.ChangeAsync(targetAccount, cancellationToken);
 
