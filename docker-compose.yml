@@ -29,9 +29,11 @@ services:
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
       - E-RedisConnectionString=domic.redis:6379
-      - I-RedisConnectionString=domic.financial.redis:6379
+#     - I-RedisConnectionString=domic.financial.redis:6379
+      - I-RedisConnectionString=domic.redis:6379
       - MongoConnectionString=
-      - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
+#     - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
+      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=FinancialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
       - Q-SqlServerConnectionString=Server=
       - Host=domic.financial.api
       - Port=443
@@ -41,8 +43,8 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Domic.WebAPI.pfx
     
     depends_on:
-      - domic.financial.command.sql.server
-      - domic.financial.redis
+#      - domic.financial.command.sql.server
+#      - domic.financialnancial.redis
   
   domic.financial.command.sql.server:
     networks:
