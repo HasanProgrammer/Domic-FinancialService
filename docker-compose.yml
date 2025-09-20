@@ -42,29 +42,29 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Domic123!@#
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Domic.WebAPI.pfx
     
-    depends_on:
+#    depends_on:
 #      - domic.financial.command.sql.server
 #      - domic.financialnancial.redis
   
-  domic.financial.command.sql.server:
-    networks:
-      - domic
-    image: 'mcr.microsoft.com/mssql/server'
-    container_name: "financial_command_sql_server"
-    ports:
-      - 1833:1433
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Hasan313@@313!!
-
-  domic.financial.redis:
-    networks:
-      - domic
-    image: 'redis'
-    container_name: 'financial_redis'
-    command: 'redis-server'
-    ports:
-      - 9080:6379
+#  domic.financial.command.sql.server:
+#    networks:
+#      - domic
+#    image: 'mcr.microsoft.com/mssql/server'
+#    container_name: "financial_command_sql_server"
+#    ports:
+#      - 1833:1433
+#    environment:
+#      - ACCEPT_EULA=Y
+#      - SA_PASSWORD=Hasan313@@313!!
+#
+#  domic.financial.redis:
+#    networks:
+#      - domic
+#    image: 'redis'
+#    container_name: 'financial_redis'
+#    command: 'redis-server'
+#    ports:
+#      - 9080:6379
 
 volumes:
   log:
