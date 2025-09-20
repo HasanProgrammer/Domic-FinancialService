@@ -14,7 +14,7 @@ services:
       - "1369-1389:443"
     volumes:
       - log:/app/CoreLogs
-      - ~\.aspnet\https\:/https/
+      - ~/services/Domic-FinancialService/.https/:/https/
     environment:
       - Elastic-Host=http://localhost:9200
       - Elastic-Username=domic
