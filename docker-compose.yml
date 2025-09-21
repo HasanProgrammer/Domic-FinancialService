@@ -32,8 +32,8 @@ services:
 #     - I-RedisConnectionString=domic.financial.redis:6379
       - I-RedisConnectionString=domic.redis:6379
       - MongoConnectionString=
-#     - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
-      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=FinancialService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;Encrypt=False;
+#     - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
+      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;Encrypt=False;
       - Q-SqlServerConnectionString=Server=
       - Host=domic.financial.api
       - Port=443
@@ -55,7 +55,7 @@ services:
 #      - 1833:1433
 #    environment:
 #      - ACCEPT_EULA=Y
-#      - SA_PASSWORD=Hasan313@@313!!
+#      - SA_PASSWORD=Domic123!@#
 #
 #  domic.financial.redis:
 #    networks:
