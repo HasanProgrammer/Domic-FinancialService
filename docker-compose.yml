@@ -2,10 +2,13 @@ name: 'financial_service'
 
 services:
   
-  domic.financial.api:
+  domic.financial.service:
     networks:
       - domic
-    image: financial_service:1.0.0
+    image: domic_financial_service_image:1.0.0
+    container_name: "domic_financial_service"
+    env_file:
+      - ~/services/Configs/Domic-FinancialService/.env
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,9 +16,8 @@ services:
     ports:
       - "1369-1389:443"
     volumes:
-      - log:/app/CoreLogs
+      - ~/services/Logs/Domic-FinancialService/:/app/CoreLogs/
       - ~/services/Domic-FinancialService/.https/:/https/
-#     - C:\https\:/https/
     environment:
       - Elastic-Host=http://localhost:9200
       - Elastic-Username=domic
@@ -33,10 +35,14 @@ services:
       - I-RedisConnectionString=domic.redis:6379
 #     - I-RedisConnectionString=domic.financial.redis:6379
       - MongoConnectionString=
-      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
-#     - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
+      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=True;
+#     - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=True;
       - Q-SqlServerConnectionString=Server=
-      - Host=domic.financial.api
+      - ZarinPalUrl=${ZarinPalUrl}
+      - ZarinPalSandBoxUrl=${ZarinPalSandBoxUrl}
+      - ZarinPalCallbackUrl=${ZarinPalCallbackUrl}
+      - ZarinPalMerchentId=${ZarinPalMerchentId}
+      - Host=domic.financial.service
       - Port=443
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -51,7 +57,7 @@ services:
 #   networks:
 #     - domic
 #   image: 'mcr.microsoft.com/mssql/server'
-#   container_name: "financial_command_sql_server"
+#   container_name: "domic_financial_command_sql_server"
 #   ports:
 #     - 1833:1433
 #   environment:
@@ -62,13 +68,10 @@ services:
 #   networks:
 #     - domic
 #   image: 'redis'
-#   container_name: 'financial_redis'
+#   container_name: 'domic_financial_redis'
 #   command: 'redis-server'
 #   ports:
 #     - 9080:6379
-
-volumes:
-  log:
     
 networks:
   domic:
