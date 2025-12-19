@@ -7,8 +7,6 @@ services:
       - domic
     image: domic_financial_service_image:1.0.0
     container_name: "domic_financial_service"
-    env_file:
-      - ~/services/Configs/Domic-FinancialService/.env
     build:
       context: .
       dockerfile: Dockerfile
