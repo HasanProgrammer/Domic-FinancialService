@@ -4,19 +4,17 @@ using Domic.Core.Infrastructure.Extensions;
 using Domic.Infrastructure.Implementations.UseCase.Services.DTOs;
 using Domic.UseCase.TransactionUseCase.Contracts.Interfaces;
 using Domic.UseCase.TransactionUseCase.DTOs;
-using Microsoft.Extensions.Hosting;
 
 namespace Domic.Infrastructure.Implementations.UseCase.Services;
 
-public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGateway
+public class ZarinPalBankGateway : IZarinPalBankGateway
 {
     public async Task<(bool result, string url, string secretKey)> RequestAsync(ZarinPalRequestDto dto, 
         CancellationToken cancellationToken
     )
     {
-        var zarinCallbackUrl  = Environment.GetEnvironmentVariable("ZarinPalCallbackUrl");
         var zarinUrl          = Environment.GetEnvironmentVariable("ZarinPalUrl");
-        var zarinSandBoxUrl   = Environment.GetEnvironmentVariable("ZarinPalSandBoxUrl");
+        var zarinCallbackUrl  = Environment.GetEnvironmentVariable("ZarinPalCallbackUrl");
         var zarinMerchantCode = Environment.GetEnvironmentVariable("ZarinPalMerchentId");
 
         using var httpClient = new HttpClient();
@@ -29,7 +27,7 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
         };
 
         var response = await httpClient.PostAsync(
-            environment.IsDevelopment() ? $"https://sandbox.zarinpal.com/pg/v4/payment/request.json" : $"https://payment.zarinpal.com/pg/v4/payment/request.json",
+            zarinUrl,
             new StringContent(requestDto.Serialize(), Encoding.UTF8, "application/json"),
             cancellationToken
         );
@@ -38,9 +36,7 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
 
         return (
             result.data.code == 100 ,
-            environment.IsDevelopment() 
-                ? $"{zarinSandBoxUrl}/{result.data.authority}?Amount={dto.Amount}"
-                : $"{zarinUrl}/{result.data.authority}?Amount={dto.Amount}",
+            $"{zarinUrl}/{result.data.authority}?Amount={dto.Amount}",
             result.data.authority
         );
     }
@@ -49,6 +45,7 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
         CancellationToken cancellationToken
     )
     {
+        var zarinVerificationUrl = Environment.GetEnvironmentVariable("ZarinPalVerificationUrl");
         var zarinMerchantCode = Environment.GetEnvironmentVariable("ZarinPalMerchentId");
         
         using var httpClient = new HttpClient();
@@ -60,7 +57,7 @@ public class ZarinPalBankGateway(IHostEnvironment environment) : IZarinPalBankGa
         };
 
         var response = await httpClient.PostAsync(
-            environment.IsDevelopment() ? $"https://sandbox.zarinpal.com/pg/v4/payment/verify.json" : $"https://payment.zarinpal.com/pg/v4/payment/verify.json",
+            zarinVerificationUrl,
             new StringContent(requestDto.Serialize(), Encoding.UTF8, "application/json"),
             cancellationToken
         );

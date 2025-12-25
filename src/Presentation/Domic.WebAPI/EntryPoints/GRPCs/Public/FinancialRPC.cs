@@ -87,7 +87,7 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
 
         return new() {
             Code = configuration.GetSuccessStatusCode(),
-            Message = "کیف پول شما با موفقیت شارژ گردید",//configuration.GetSuccessUpdateMessage(),
+            Message = "کیف پول شما با موفقیت شارژ گردید", //configuration.GetSuccessUpdateMessage(),
             Body = new PaymentVerificationResponseBody {
                 Status = result.Status , TransactionNumber = new String { Value = result.TransactionNumber }
             }
