@@ -37,6 +37,7 @@ services:
 #     - C-SqlServerConnectionString=Server=domic.financial.command.sql.server,1433;Database=FinancialService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=True;
       - Q-SqlServerConnectionString=Server=
       - ZarinPalUrl=${ZarinPalUrl}
+      - ZarinPalGatewayUrl=${ZarinPalGatewayUrl}
       - ZarinPalVerificationUrl=${ZarinPalVerificationUrl}
       - ZarinPalCallbackUrl=${ZarinPalCallbackUrl}
       - ZarinPalMerchentId=${ZarinPalMerchentId}

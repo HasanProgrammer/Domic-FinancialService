@@ -14,6 +14,7 @@ public class ZarinPalBankGateway : IZarinPalBankGateway
     )
     {
         var zarinUrl          = Environment.GetEnvironmentVariable("ZarinPalUrl");
+        var zarinGatewayUrl   = Environment.GetEnvironmentVariable("ZarinPalGatewayUrl");
         var zarinCallbackUrl  = Environment.GetEnvironmentVariable("ZarinPalCallbackUrl");
         var zarinMerchantCode = Environment.GetEnvironmentVariable("ZarinPalMerchentId");
 
@@ -36,7 +37,7 @@ public class ZarinPalBankGateway : IZarinPalBankGateway
 
         return (
             result.data.code == 100 ,
-            $"{zarinUrl}/{result.data.authority}?Amount={dto.Amount}",
+            $"{zarinGatewayUrl}/{result.data.authority}?Amount={dto.Amount}",
             result.data.authority
         );
     }
