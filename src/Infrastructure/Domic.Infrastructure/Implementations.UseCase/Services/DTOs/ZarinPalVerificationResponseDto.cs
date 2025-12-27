@@ -3,7 +3,6 @@
 public class ZarinPalVerificationResponseDto
 {
     public VerifyData data { get; set; }
-    public string[] errors { get; set; }
 }
 
 public class VerifyData
