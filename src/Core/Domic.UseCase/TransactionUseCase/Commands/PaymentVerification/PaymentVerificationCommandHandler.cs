@@ -1,4 +1,6 @@
-﻿using Domic.Core.Domain.Contracts.Interfaces;
+﻿#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
@@ -17,7 +19,8 @@ public class PaymentVerificationCommandHandler(
     IBankGatewayLogHistoryCommandRepository bankGatewayLogHistoryCommandRepository,
     ITransactionCommandRepository transactionCommandRepository, IDateTime dateTime, ISerializer serializer,
     [FromKeyedServices("Http2")] IIdentityUser identityUser, IGlobalUniqueIdGenerator globalUniqueIdGenerator,
-    IAccountCommandRepository accountCommandRepository
+    IAccountCommandRepository accountCommandRepository,
+    ILogger logger
 ) : ICommandHandler<PaymentVerificationCommand, PaymentVerificationCommandResponse>
 {
     public Task BeforeHandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
@@ -26,10 +29,14 @@ public class PaymentVerificationCommandHandler(
     [WithTransaction]
     public async Task<PaymentVerificationCommandResponse> HandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
     {
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", serializer.Serialize( $"secretkey: { command.BankGatewaySecretKey }"), cancellationToken);
+        
         var targetTransaction =
             await transactionCommandRepository.FindBySecretConnectionKeyAsync(command.BankGatewaySecretKey,
                 cancellationToken
             );
+        
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", serializer.Serialize( $"targetTransaction: { targetTransaction }"), cancellationToken);
 
         if (targetTransaction is not null && targetTransaction.IsActive == IsActive.InActive)
         {
