@@ -68,7 +68,7 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
             cancellationToken
         );
         
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentContent", response.Content.Serialize(), cancellationToken);
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentPayload", requestDto.Serialize(), cancellationToken);
         
         var result = await response.Content.ReadFromJsonAsync<ZarinPalVerificationResponseDto>(cancellationToken);
 
