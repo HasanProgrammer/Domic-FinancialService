@@ -36,8 +36,6 @@ public class PaymentVerificationCommandHandler(
                 cancellationToken
             );
         
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-TargetTransaction", serializer.Serialize(targetTransaction), cancellationToken);
-
         if (targetTransaction is not null && targetTransaction.IsActive == IsActive.InActive)
         {
             var verifyDto = new ZarinPalVerificationDto {
