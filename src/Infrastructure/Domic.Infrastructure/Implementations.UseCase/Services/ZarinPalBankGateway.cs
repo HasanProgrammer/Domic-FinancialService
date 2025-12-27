@@ -36,9 +36,11 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
             cancellationToken
         );
             
-        var result = await response.Content.ReadFromJsonAsync<ZarinPalResponseDto>(cancellationToken);
+        var rowResult = await response.Content.ReadAsStringAsync(cancellationToken);
+        
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-RequestPaymentResult", rowResult, cancellationToken);
 
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-RequestPaymentResult", result.Serialize(), cancellationToken);
+        var result = rowResult.DeSerialize<ZarinPalResponseDto>();
         
         return (
             result.data.code == 100 ,
@@ -72,9 +74,9 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
         
         var rowResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
-        var result = rowResult.DeSerialize<ZarinPalVerificationResponseDto>();
-        
         logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentResult", rowResult, cancellationToken);
+        
+        var result = rowResult.DeSerialize<ZarinPalVerificationResponseDto>();
         
         return ( result.data.code == 100 , result.data.ref_id.ToString() );
     }
