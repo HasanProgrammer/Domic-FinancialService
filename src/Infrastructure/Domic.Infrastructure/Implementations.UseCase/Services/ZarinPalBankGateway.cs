@@ -70,9 +70,11 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
         
         logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentPayload", requestDto.Serialize(), cancellationToken);
         
-        var result = await response.Content.ReadFromJsonAsync<ZarinPalVerificationResponseDto>(cancellationToken);
+        var rowResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentResult", result.Serialize(), cancellationToken);
+        var result = rowResult.DeSerialize<ZarinPalVerificationResponseDto>();
+        
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentResult", rowResult, cancellationToken);
         
         return ( result.data.code == 100 , result.data.ref_id.ToString() );
     }
