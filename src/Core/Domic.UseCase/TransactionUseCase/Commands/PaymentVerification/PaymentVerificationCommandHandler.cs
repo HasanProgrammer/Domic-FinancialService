@@ -29,14 +29,14 @@ public class PaymentVerificationCommandHandler(
     [WithTransaction]
     public async Task<PaymentVerificationCommandResponse> HandleAsync(PaymentVerificationCommand command, CancellationToken cancellationToken)
     {
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", serializer.Serialize( $"secretkey: { command.BankGatewaySecretKey }"), cancellationToken);
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-SecretKey", serializer.Serialize(command.BankGatewaySecretKey), cancellationToken);
         
         var targetTransaction =
             await transactionCommandRepository.FindBySecretConnectionKeyAsync(command.BankGatewaySecretKey,
                 cancellationToken
             );
         
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", serializer.Serialize( $"targetTransaction: { targetTransaction }"), cancellationToken);
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-TargetTransaction", serializer.Serialize(targetTransaction), cancellationToken);
 
         if (targetTransaction is not null && targetTransaction.IsActive == IsActive.InActive)
         {

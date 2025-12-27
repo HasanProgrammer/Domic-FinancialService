@@ -20,11 +20,6 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
         var zarinGatewayUrl   = Environment.GetEnvironmentVariable("ZarinPalGatewayUrl");
         var zarinCallbackUrl  = Environment.GetEnvironmentVariable("ZarinPalCallbackUrl");
         var zarinMerchantCode = Environment.GetEnvironmentVariable("ZarinPalMerchentId");
-        
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", zarinUrl.Serialize(), cancellationToken);
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", zarinGatewayUrl.Serialize(), cancellationToken);
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", zarinCallbackUrl.Serialize(), cancellationToken);
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", zarinMerchantCode.Serialize(), cancellationToken);
 
         using var httpClient = new HttpClient();
 
@@ -43,8 +38,7 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
             
         var result = await response.Content.ReadFromJsonAsync<ZarinPalResponseDto>(cancellationToken);
 
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", result.Serialize(), cancellationToken);
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", $"{zarinGatewayUrl}/{result.data?.authority}?Amount={dto.Amount}".Serialize(), cancellationToken);
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-RequestPaymentResult", result.Serialize(), cancellationToken);
         
         return (
             result.data.code == 100 ,
@@ -60,9 +54,6 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
         var zarinVerificationUrl = Environment.GetEnvironmentVariable("ZarinPalVerificationUrl");
         var zarinMerchantCode = Environment.GetEnvironmentVariable("ZarinPalMerchentId");
         
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", zarinVerificationUrl.Serialize(), cancellationToken);
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", zarinMerchantCode.Serialize(), cancellationToken);
-        
         using var httpClient = new HttpClient();
 
         var requestDto = new {
@@ -77,9 +68,11 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
             cancellationToken
         );
         
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentContent", response.Content.Serialize(), cancellationToken);
+        
         var result = await response.Content.ReadFromJsonAsync<ZarinPalVerificationResponseDto>(cancellationToken);
 
-        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", result.Serialize(), cancellationToken);
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService-VerifyPeymentResult", result.Serialize(), cancellationToken);
         
         return ( result.data.code == 100 , result.data.ref_id.ToString() );
     }
