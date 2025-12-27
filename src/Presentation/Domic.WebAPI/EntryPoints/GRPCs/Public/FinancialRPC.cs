@@ -87,7 +87,7 @@ public class FinancialRPC(IMediator mediator, IConfiguration configuration) : Fi
 
         return new() {
             Code = configuration.GetSuccessStatusCode(),
-            Message = "کیف پول شما با موفقیت شارژ گردید", //configuration.GetSuccessUpdateMessage(),
+            Message = result.Status ? "کیف پول شما با موفقیت شارژ گردید" : "تراکنش ناموفق؛ درصورتی که مبلغی از حساب شما کسر شده باشد طی 72 ساعت آینده به شکل خودکار به حساب شما عودت داده خواهد شد" , //configuration.GetSuccessUpdateMessage(),
             Body = new PaymentVerificationResponseBody {
                 Status = result.Status , TransactionNumber = new String { Value = result.TransactionNumber }
             }

@@ -44,6 +44,7 @@ public class ZarinPalBankGateway(ILogger logger) : IZarinPalBankGateway
         var result = await response.Content.ReadFromJsonAsync<ZarinPalResponseDto>(cancellationToken);
 
         logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", result.Serialize(), cancellationToken);
+        logger.RecordAsync(Guid.NewGuid().ToString(), "FinancialService", $"{zarinGatewayUrl}/{result.data?.authority}?Amount={dto.Amount}".Serialize(), cancellationToken);
         
         return (
             result.data.code == 100 ,
